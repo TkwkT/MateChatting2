@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.example.matechatting">
+
+    <!-- !!读内存权限 -->
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> <!-- 网络状态权限 -->
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- 网络状态权限 -->
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <application
+            android:name=".MyApplication"
+            android:allowBackup="true"
+            android:icon="@drawable/ic_logo"
+            android:label="@string/app_name"
+            android:networkSecurityConfig="@xml/network_security_config"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+
+
+        <receiver
+                android:name=".receiver.NetChangeReceiverReceiver"
+                android:enabled="true"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+                android:name=".otherprocess.service.NetService"
+                android:enabled="true"
+                android:exported="true"
+                android:process="net.test">
+        </service>
+
+        <activity
+                android:name=".function.direction.DirectionNewActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.chatting.ChattingActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.homesearch.HomeSearchActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.cliphead.ClipActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.album.AlbumActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.bindphone.BindPhoneActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.forgetpassword.ForgetPasswordActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.changepassword.ChangePasswordActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.login.LoginActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.myinfo.MyinfoActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.myinfo.PersonsignActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".DirectionActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.infodetail.InfoDetailActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".function.main.MainActivity"
+                android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
