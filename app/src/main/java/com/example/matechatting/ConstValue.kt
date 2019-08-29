@@ -1,5 +1,6 @@
 package com.example.matechatting
 
+import android.content.BroadcastReceiver
 import com.example.matechatting.R
 
 //从相册选择页面返回数据的请求码
@@ -17,10 +18,38 @@ const val FORGET_REQUEST_CODE = 0x132
 //第一次登陆从我的信息页返回登录页请求码
 const val FIRST_MY_INFO_REQUEST_CODE = 0x133
 
-const val BASE_URL = "http://8c9n2z.natappfree.cc"
+const val BASE_URL = "http://rujfjc.natappfree.cc"
 const val PATH = "/static/"
-
+const val HOST = "server.natappfree.cc"
+const val PORT = 37446
 var PAGE = ArrayList<Int>()
+/**
+ * 广播
+ */
+const val ADD_FRIEND_REQUEST_BROADCAST_ACTION = "com.example.matechatting.addfriend"
+const val ACCEPT_FRIEND_ACTION = "com.example.matechatting.acceptfriend"
+const val HAS_NEW_MESSAGE_ACTION = "com.example.matechatting.hasnewmessage"
+const val ON_LINE_FRIEND = "com.example.matechatting.onlinefriend"
+const val LOG_IN_ACTION = "com.example.matechatting.login"
+const val LOG_OUT_ACTION = "com.example.matechatting.logout"
+/**
+ * 加好友错误subject
+ */
+const val HAS_NEW_FRIEND = "has_new_friend"
+
+/**
+ * InfoDetail subject
+ */
+const val HOME_ITEM = 1
+const val NEW_FRIEND = 2
+const val NEW_CHATTING = 3
+const val FRIEND = 4
+
+/**
+ * 正则
+ */
+val QQ_REGEX = Regex("^[1-9][0-9]{4,9}\$")
+val EMAIL_REGEX = Regex("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$")
 
 const val JOB_SERVICE_NAME = 0x9999
 

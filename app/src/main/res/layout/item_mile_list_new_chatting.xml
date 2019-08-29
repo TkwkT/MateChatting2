@@ -25,9 +25,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="@drawable/shape_circle_corner"
-		android:layout_marginLeft="16dp"
-		android:layout_marginTop="12dp"
-		android:layout_marginRight="16dp">
+		android:layout_marginTop="12dp">
 
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:layout_width="match_parent"
@@ -82,7 +80,7 @@
 				app:layout_constraintLeft_toLeftOf="parent"
 				app:layout_constraintRight_toRightOf="parent"
 				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintHorizontal_bias="0.9"
+				app:layout_constraintHorizontal_bias="1"
 				android:background="@drawable/shape_circular_read"/>
 			<!--<Button-->
 			<!--android:id="@+id/item_person_change_button"-->
@@ -125,7 +123,7 @@
 				android:layout_height="wrap_content"
 				android:text="擅长部分："
 				android:textColor="@color/text_item_person_dark"
-				android:textSize="12sp"/>
+				android:textSize="14sp"/>
 
 			<TextView
 				android:id="@+id/item_friend_major"
@@ -136,7 +134,9 @@
 				android:layout_height="wrap_content"
 				android:text="前端开发"
 				android:textColor="@color/text_item_person_gray"
-				android:textSize="12sp"/>
+				android:textSize="14sp"
+				android:singleLine="true"
+				android:ellipsize="marquee"/>
 
 			<TextView
 				android:id="@+id/item_home_tv_temp2"
@@ -149,7 +149,7 @@
 				app:layout_constraintHorizontal_bias="0.55"
 				android:text="所在公司："
 				android:textColor="@color/text_item_person_dark"
-				android:textSize="12sp"/>
+				android:textSize="14sp"/>
 
 			<TextView
 				android:id="@+id/item_friend_company"
@@ -160,7 +160,7 @@
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:text="腾讯（深圳）科技有限公司"
-				android:textSize="12sp"
+				android:textSize="14sp"
 				android:textColor="@color/text_item_person_gray"
 				android:singleLine="true"
 				android:ellipsize="marquee"/>

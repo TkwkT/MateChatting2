@@ -12,7 +12,9 @@ class OtherTokenInterceptor(private val token:String) : Interceptor {
         } else {
             Log.d("aaa", "OtherTokenInterceptor : $token")
             val originalRequest = chain.request()
-            val updateRequest = originalRequest.newBuilder().header("token", token).build()
+            val updateRequest = originalRequest.newBuilder()
+                .header("token", token)
+                .addHeader("Connection", "keep-alive").build()
             chain.proceed(updateRequest)
         }
     }

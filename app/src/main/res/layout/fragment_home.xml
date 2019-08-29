@@ -2,7 +2,7 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:app="http://schemas.android.com/apk/res-auto"
-		tools:context=".function.home.HomeFragment">
+		tools:context=".mainprocess.home.HomeFragment">
 
 	<com.example.matechatting.myview.StatusBarHeightView
 		android:layout_width="match_parent"

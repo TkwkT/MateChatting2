@@ -21,7 +21,7 @@ object RetrofitUtil {
         tokenInterceptor: Interceptor? = null
     ): OkHttpClient.Builder {
         //超时时间
-        val defaultTimeout = 5L
+        val defaultTimeout = 10L
         //OkHttp日志拦截器
         val loggingInterceptor = HttpLoggingInterceptor {
             try {

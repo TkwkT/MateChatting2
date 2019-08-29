@@ -17,6 +17,6 @@ interface HomeItemDao{
     @Query("SELECT * FROM home_item")
     fun getHomeItem(): DataSource.Factory<Int, HomeItemBean>
 
-    @Query("SELECT * FROM home_item LIMIT :first,:end")
-    fun getHomeItemLimit(first:Int,end:Int): Single<List<HomeItemBean>>
+    @Query("SELECT * FROM home_item")
+    fun getHomeItemLimit(): Single<List<HomeItemBean>>
 }

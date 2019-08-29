@@ -26,4 +26,8 @@ object PinyinUtil {
         }
         return sb.toString()
     }
+
+    fun getFirstPinyin(str:String):String{
+        return getPinyin(str).substring(0,1)
+    }
 }

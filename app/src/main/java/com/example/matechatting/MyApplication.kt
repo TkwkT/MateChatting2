@@ -18,8 +18,8 @@ class MyApplication : MultiDexApplication() {
 //            return
 //        }
         RxJavaPlugins.setErrorHandler {
-            val message = it.message?:""
-            Log.d("aaa",message)
+            val message = it.message ?: ""
+            Log.d("aaa", message)
         }
 //        sRefWatcher = LeakCanary.install(this)
         context = applicationContext
@@ -34,24 +34,30 @@ class MyApplication : MultiDexApplication() {
             return context
         }
 
-        fun saveLoginState(account: String,token:String,id:Int){
+        fun saveLoginState(account: String, token: String, id: Int, inSchool: Boolean) {
             context.getSharedPreferences("loginInfo", Context.MODE_PRIVATE).edit {
                 putBoolean("isLogin", true)
                 putString("account", account)
-                putString("token",token)
-                putString("userId",id.toString())
+                putString("token", token)
+                putInt("userId", id)
+                putBoolean("inSchool", inSchool)
                 commit()
             }
         }
 
-        fun getToken():String?{
+        fun getToken(): String? {
             val sharedPreferences = context.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
-            return sharedPreferences.getString("token","")
+            return sharedPreferences.getString("token", "")
         }
 
-        fun getUserId():Int?{
+        fun getInSchool(): Boolean? {
             val sharedPreferences = context.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
-            return sharedPreferences.getString("userId","0")?.toInt()
+            return sharedPreferences.getBoolean("inSchool", false)
+        }
+
+        fun getUserId(): Int? {
+            val sharedPreferences = context.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
+            return sharedPreferences.getInt("userId", 0)
         }
     }
 

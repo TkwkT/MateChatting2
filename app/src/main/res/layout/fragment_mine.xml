@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:app="http://schemas.android.com/apk/res-auto"
 		xmlns:tools="http://schemas.android.com/tools"
-		tools:context=".function.mine.MineFragment">
+		tools:context=".mainprocess.mine.MineFragment">
 
 	<data>
 
 		<variable
 			name="viewmodel"
-			type="com.example.matechatting.function.mine.MineViewModel"/>
+			type="com.example.matechatting.mainprocess.mine.MineViewModel"/>
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -71,7 +71,7 @@
 					app:layout_constraintRight_toRightOf="parent"
 					app:layout_constraintHorizontal_bias="0.355"
 					android:layout_marginTop="30dp"
-					android:text="@{viewmodel.mineName ?? viewmodel.defaultName}"
+					android:text="@{viewmodel.mineName}"
 					android:textSize="17sp"
 					android:textColor="#4d4a4a"/>
 
@@ -98,7 +98,7 @@
 					android:layout_marginBottom="28dp"
 					android:layout_marginRight="20dp"
 					android:layout_marginEnd="20dp"
-					android:text="@{viewmodel.mineSlogan ?? viewmodel.defaultSlogan}"
+					android:text="@{viewmodel.mineSlogan}"
 					android:textSize="12sp"
 					android:textColor="#636363"
 					android:singleLine="true"

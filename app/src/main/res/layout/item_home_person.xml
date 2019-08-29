@@ -99,7 +99,7 @@
 				android:layout_height="wrap_content"
 				android:text="擅长部分："
 				android:textColor="@color/text_item_person_dark"
-				android:textSize="12sp"/>
+				android:textSize="14sp"/>
 
 			<TextView
 				android:id="@+id/item_person_major"
@@ -111,7 +111,7 @@
 				android:layout_height="wrap_content"
 				android:text="前端开发"
 				android:textColor="@color/text_item_person_gray"
-				android:textSize="12sp"
+				android:textSize="14sp"
 				android:singleLine="true"
 				android:ellipsize="marquee"/>
 
@@ -126,7 +126,7 @@
 				app:layout_constraintHorizontal_bias="0.55"
 				android:text="所在公司："
 				android:textColor="@color/text_item_person_dark"
-				android:textSize="12sp"/>
+				android:textSize="14sp"/>
 
 			<TextView
 				android:id="@+id/item_person_company"
@@ -137,7 +137,7 @@
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:text="腾讯（深圳）科技有限公司"
-				android:textSize="12sp"
+				android:textSize="14sp"
 				android:textColor="@color/text_item_person_gray"
 				android:singleLine="true"
 				android:ellipsize="marquee"/>

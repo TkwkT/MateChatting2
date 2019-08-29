@@ -1,40 +1,33 @@
 package com.example.matechatting.utils
 
 import android.content.Context
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.bumptech.glide.Glide.init
-import com.example.matechatting.MyApplication
 import com.example.matechatting.R
 
 class ToastUtil {
     private lateinit var inflater: View
     private lateinit var textView: TextView
-    private lateinit var layout:ConstraintLayout
+    private lateinit var layout: ConstraintLayout
 
-    fun setToast(context: Context,message: String) {
-        init(message,context)
+    fun setToast(context: Context, message: String) {
+        init(message, context)
         val toast = Toast(context)
-        toast.setGravity(Gravity.TOP ,0,0)
+        toast.setGravity(Gravity.TOP, 0, 0)
         toast.duration = Toast.LENGTH_SHORT
         toast.view = inflater
         toast.show()
     }
 
-    private fun init(message: String,context: Context){
-        inflater = LayoutInflater.from(context).inflate(R.layout.temp_toast_warning,null)
+    private fun init(message: String, context: Context) {
+        inflater = LayoutInflater.from(context).inflate(R.layout.temp_toast, null)
         textView = inflater.findViewById(R.id.toast_text)
         textView.text = message
         layout = inflater.findViewById(R.id.toast_layout)
 
     }
 }
-
-
-

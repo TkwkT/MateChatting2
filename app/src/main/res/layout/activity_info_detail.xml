@@ -8,7 +8,7 @@
 
 		<variable
 			name="viewmodel"
-			type="com.example.matechatting.function.infodetail.InfoDetailViewModel"/>
+			type="com.example.matechatting.mainprocess.infodetail.InfoDetailViewModel"/>
 	</data>
 
 	<LinearLayout
@@ -403,6 +403,22 @@
 						android:layout_marginBottom="52dp"
 						android:textSize="14sp"
 						android:textColor="@color/text_ffffff"/>
+
+					<Button
+						android:id="@+id/info_detail_accept_button"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						app:layout_constraintTop_toBottomOf="@id/info_detail_info_layout"
+						android:background="@drawable/shape_bt_enable"
+						android:layout_marginLeft="68dp"
+						android:layout_marginRight="68dp"
+						android:stateListAnimator="@null"
+						android:text="同意"
+						android:layout_marginTop="22dp"
+						android:layout_marginBottom="52dp"
+						android:textSize="14sp"
+						android:textColor="@color/text_ffffff"
+						android:visibility="gone"/>
 
 					<Button
 						android:id="@+id/info_chatting_button"

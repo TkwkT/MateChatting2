@@ -1,9 +1,6 @@
 package com.example.matechatting.database
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.matechatting.bean.AccountBean
 import io.reactivex.Single
 
@@ -22,7 +19,7 @@ interface LoginDao{
     @Query("SELECT * FROM account WHERE token = :token")
     fun getAllByToken(token:String):Single<AccountBean>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAccount(account: AccountBean):Single<Long>
 
     @Delete

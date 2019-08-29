@@ -137,3 +137,13 @@ interface GetSmallDirectionService {
     @POST("/get_small_directions")
     fun geySmallDirection(@Field("direction_id") bigId: Int): Observable<SmallDirectionBean>
 }
+
+interface GetAllFriendService {
+    @POST("/user/get_friend_all_fields")
+    fun getAllFriend(): Observable<List<UserBean>>
+}
+
+interface GetAllFriendIdService {
+    @POST("/user/get_friend")
+    fun getAllFriendId(): Observable<SPFriendListBean>
+}

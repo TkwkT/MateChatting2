@@ -1,14 +1,32 @@
 package com.example.matechatting.bean
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+
 
 
 data class BigDirectionBean(
     @SerializedName("direction_name")
     var directionName: String,
-    @SerializedName("id")
+    @PrimaryKey
     var id: Int,
+    @Ignore
     var isSelectCurrent: Boolean = false,
+    var isSelect: Boolean = false
+)
+@Entity(tableName = "direction")
+data class DirectionBean(
+    @SerializedName("direction_name")
+    val directionName: String,
+    @PrimaryKey
+    val id: Int,
+    @ColumnInfo(name = "parent_id")
+    var parentId: Int = 0,
+    var bigDirectionId: Int = 0,
+    @ColumnInfo(name = "is_select")
     var isSelect: Boolean = false
 )
 

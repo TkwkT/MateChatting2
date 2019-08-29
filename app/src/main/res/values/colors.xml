@@ -26,6 +26,7 @@
     <color name="text_green">#8AEEA0</color>
     <color name="text_777777">#777777</color>
     <color name="text_555555">#555555</color>
+    <color name="text_908f8f">#908F8F</color>
 
 
     <color name="line_e9e9e9">#E9E9E9</color>
@@ -39,6 +40,7 @@
     <color name="bg_656bff">#656BFF</color>
     <color name="bg_disable">#E4E4E4</color>
     <color name="bg_fcfcfc">#FCFCFC</color>
+    <color name="bg_393939">#393939</color>
 
 
     <!--黄色 -->

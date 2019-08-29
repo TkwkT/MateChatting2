@@ -2,33 +2,40 @@ package com.example.matechatting.utils
 
 import android.content.Context
 import com.example.matechatting.database.AppDatabase
-import com.example.matechatting.function.bindphone.BindPhoneRepository
-import com.example.matechatting.function.bindphone.BindPhoneViewModelFactory
-import com.example.matechatting.function.changepassword.ChangePasswordByTokenRepository
-import com.example.matechatting.function.changepassword.ChangePasswordByTokenViewModelFactory
-import com.example.matechatting.function.cliphead.ClipRepository
-import com.example.matechatting.function.cliphead.ClipViewModelFactory
-import com.example.matechatting.function.direction.DirectionActivityRepository
-import com.example.matechatting.function.direction.DirectionActivityViewModelFactory
-import com.example.matechatting.function.direction.DirectionFragmentRepository
-import com.example.matechatting.function.direction.DirectionFragmentViewModelFactory
-import com.example.matechatting.function.forgetpassword.ForgetPasswordRepository
-import com.example.matechatting.function.forgetpassword.ForgetPasswordViewModelFactory
-import com.example.matechatting.function.forgetpassword.ResetPassRepository
-import com.example.matechatting.function.forgetpassword.ResetPassViewModelFactory
-import com.example.matechatting.function.home.HomeItemRepository
-import com.example.matechatting.function.home.HomeItemViewModelFactory
-import com.example.matechatting.function.homesearch.HomeSearchRepository
-import com.example.matechatting.function.homesearch.HomeSearchViewModelFactory
-import com.example.matechatting.function.infodetail.InfoDetailRepository
-import com.example.matechatting.function.infodetail.InfoDetailViewModelFactory
-import com.example.matechatting.function.login.LoginRepository
-import com.example.matechatting.function.login.LoginViewModelFactory
-import com.example.matechatting.function.mine.MineRepository
-import com.example.matechatting.function.mine.MineViewModelFactory
-import com.example.matechatting.function.myinfo.MyInfoRepository
-import com.example.matechatting.function.myinfo.MyInfoViewModelFactory
-import com.example.matechatting.otherprocess.repository.AccountRepository
+import com.example.matechatting.mainprocess.bindphone.BindPhoneRepository
+import com.example.matechatting.mainprocess.bindphone.BindPhoneViewModelFactory
+import com.example.matechatting.mainprocess.changepassword.ChangePasswordByTokenRepository
+import com.example.matechatting.mainprocess.changepassword.ChangePasswordByTokenViewModelFactory
+import com.example.matechatting.mainprocess.chatting.ChattingRepository
+import com.example.matechatting.mainprocess.chatting.ChattingViewModel
+import com.example.matechatting.mainprocess.chatting.ChattingViewModelFactory
+import com.example.matechatting.mainprocess.cliphead.ClipRepository
+import com.example.matechatting.mainprocess.cliphead.ClipViewModelFactory
+import com.example.matechatting.mainprocess.direction.DirectionActivityRepository
+import com.example.matechatting.mainprocess.direction.DirectionActivityViewModelFactory
+import com.example.matechatting.mainprocess.direction.DirectionFragmentRepository
+import com.example.matechatting.mainprocess.direction.DirectionFragmentViewModelFactory
+import com.example.matechatting.mainprocess.forgetpassword.ForgetPasswordRepository
+import com.example.matechatting.mainprocess.forgetpassword.ForgetPasswordViewModelFactory
+import com.example.matechatting.mainprocess.forgetpassword.ResetPassRepository
+import com.example.matechatting.mainprocess.forgetpassword.ResetPassViewModelFactory
+import com.example.matechatting.mainprocess.home.HomeItemRepository
+import com.example.matechatting.mainprocess.home.HomeItemViewModelFactory
+import com.example.matechatting.mainprocess.homesearch.HomeSearchRepository
+import com.example.matechatting.mainprocess.homesearch.HomeSearchViewModelFactory
+import com.example.matechatting.mainprocess.infodetail.InfoDetailRepository
+import com.example.matechatting.mainprocess.infodetail.InfoDetailViewModelFactory
+import com.example.matechatting.mainprocess.login.LoginRepository
+import com.example.matechatting.mainprocess.login.LoginViewModelFactory
+import com.example.matechatting.mainprocess.main.MainRepository
+import com.example.matechatting.mainprocess.main.MainViewModelFactory
+import com.example.matechatting.mainprocess.milelist.MileListRepository
+import com.example.matechatting.mainprocess.milelist.MileListViewModelFactory
+import com.example.matechatting.mainprocess.mine.MineRepository
+import com.example.matechatting.mainprocess.mine.MineViewModelFactory
+import com.example.matechatting.mainprocess.myinfo.MyInfoRepository
+import com.example.matechatting.mainprocess.myinfo.MyInfoViewModelFactory
+import com.example.matechatting.tcpprocess.repository.AccountRepository
 
 object InjectorUtils {
 
@@ -120,10 +127,46 @@ object InjectorUtils {
         return DirectionActivityViewModelFactory(DirectionActivityRepository())
     }
 
-    fun provideDirectionFragmentViewModelFactory(context: Context): DirectionFragmentViewModelFactory {
-        return DirectionFragmentViewModelFactory(DirectionFragmentRepository())
+    fun getDirectionRepository(context: Context): DirectionFragmentRepository {
+        return DirectionFragmentRepository.getInstance(
+            AppDatabase.getInstance(context.applicationContext).directionDao()
+        )
     }
 
+    fun provideDirectionFragmentViewModelFactory(context: Context): DirectionFragmentViewModelFactory {
+        return DirectionFragmentViewModelFactory(getDirectionRepository(context))
+    }
+
+    fun getMileListRepository(context: Context): MileListRepository {
+        return MileListRepository.getInstance(
+            AppDatabase.getInstance(context.applicationContext).userInfoDao()
+        )
+    }
+
+    fun provideMileListViewModelFactory(context: Context): MileListViewModelFactory {
+        return MileListViewModelFactory(getMileListRepository(context))
+    }
+
+    fun getMainRepository(context: Context): MainRepository {
+        return MainRepository.getInstance(
+            AppDatabase.getInstance(context.applicationContext).userInfoDao()
+        )
+    }
+
+    fun provideMainViewModelFactory(context: Context): MainViewModelFactory {
+        return MainViewModelFactory(getMainRepository(context))
+    }
+
+    fun getChattingRepository(context: Context): ChattingRepository {
+        return ChattingRepository.getInstance(
+            AppDatabase.getInstance(context.applicationContext).chattingDao(),
+            AppDatabase.getInstance(context.applicationContext).userInfoDao()
+        )
+    }
+
+    fun provideChattingViewModelFactory(context: Context): ChattingViewModelFactory {
+        return ChattingViewModelFactory(getChattingRepository(context))
+    }
 
 //
 //    fun getDetailRepository(context: Context): DetailRepository {

@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:app="http://schemas.android.com/apk/res-auto"
 		xmlns:tools="http://schemas.android.com/tools"
-		tools:context=".function.myinfo.MyinfoActivity">
+		tools:context=".mainprocess.myinfo.MyinfoActivity">
 
 	<data>
 
 		<variable
 			name="viewmodel"
-			type="com.example.matechatting.function.myinfo.MyInfoViewModel"/>
+			type="com.example.matechatting.mainprocess.myinfo.MyInfoViewModel"/>
 	</data>
 
 	<LinearLayout
@@ -166,7 +166,7 @@
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:textSize="14sp"
-							android:text="毕业时间"
+							android:text="入学时间"
 							android:textColor="@color/text_4e4e4e"
 							android:layout_gravity="center_vertical"
 							android:layout_marginLeft="22dp"

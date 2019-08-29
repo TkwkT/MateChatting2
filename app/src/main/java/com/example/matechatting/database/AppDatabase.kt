@@ -4,18 +4,23 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.matechatting.bean.AccountBean
-import com.example.matechatting.bean.HomeItemBean
-import com.example.matechatting.bean.UserBean
+import com.example.matechatting.bean.*
 
-@Database(entities = [AccountBean::class, HomeItemBean::class,UserBean::class],version = 1, exportSchema = false)
-abstract class AppDatabase :RoomDatabase(){
+@Database(
+    entities = [AccountBean::class, HomeItemBean::class, UserBean::class, ChattingBean::class, DirectionBean::class],
+    version = 1,
+    exportSchema = false
+)
+abstract class AppDatabase : RoomDatabase() {
     abstract fun loginDao(): LoginDao
     abstract fun homeItemDao(): HomeItemDao
-    abstract fun userInfoDao():UserInfoDao
+    abstract fun userInfoDao(): UserInfoDao
+    abstract fun chattingDao(): ChattingDao
+    abstract fun directionDao(): DirectionDao
 
-    companion object{
-        @Volatile private var instance: AppDatabase? = null
+    companion object {
+        @Volatile
+        private var instance: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
             return instance ?: synchronized(this) {

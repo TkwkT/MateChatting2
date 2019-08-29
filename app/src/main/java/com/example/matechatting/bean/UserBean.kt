@@ -43,7 +43,7 @@ data class UserBean(
     @ColumnInfo(name = "profile_photo")
     @SerializedName("profile_photo")
     var headImage: String = "",
-    var gender:String = "",
+    var gender: String = "",
     @PrimaryKey
     @SerializedName("id")
     @ColumnInfo(name = "id")
@@ -54,4 +54,13 @@ data class UserBean(
     @ColumnInfo(name = "graduation")
     var graduation: String = ""
 
+    var first: Boolean = false
+
+    /**
+     * state:0(陌生人)，1（自己），2（新好友），3（聊天好友），4（好友）
+     */
+    var state: Int = 0
+    @ColumnInfo(name = "on_line")
+    var onLine: Boolean = false
+    var pinyin: String = ""
 }

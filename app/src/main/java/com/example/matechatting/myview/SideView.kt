@@ -81,59 +81,58 @@ class SideView : View {
         val suggestedWidth = suggestedMinimumWidth
         val suggestedHeight = suggestedMinimumHeight
 
-        val width = measureWidth(suggestedWidth,widthMeasureSpec)
-        val height = measureHeight(suggestedHeight,heightMeasureSpec)
-        setMeasuredDimension(width,height)
+        val width = measureWidth(suggestedWidth, widthMeasureSpec)
+        val height = measureHeight(suggestedHeight, heightMeasureSpec)
+        setMeasuredDimension(width, height)
     }
 
-    private fun measureWidth(defaultWidth:Int, measureSpec:Int):Int{
+    private fun measureWidth(defaultWidth: Int, measureSpec: Int): Int {
         val widthSpecMode = MeasureSpec.getMode(measureSpec)
         val widthSpecSize = MeasureSpec.getSize(measureSpec)
         var mWidth = 0
-        when(widthSpecMode){
-            MeasureSpec.AT_MOST ->{
+        when (widthSpecMode) {
+            MeasureSpec.AT_MOST -> {
                 var temp1 = 0f
                 var maxWidth = 0f
-                for (i: Int in 0 until A_Z.length) {
-                    temp1 = paint.measureText(A_Z[i].toString())
+                for (i: Int in 0 until A_Z.size) {
+                    temp1 = paint.measureText(A_Z[i])
                     if (temp1 > maxWidth) {
                         maxWidth = temp1
                     }
                 }
                 mWidth = (maxWidth + 2).toInt()
             }
-            MeasureSpec.EXACTLY ->{
+            MeasureSpec.EXACTLY -> {
                 mWidth = widthSpecSize
             }
-            MeasureSpec.UNSPECIFIED ->{
-                mWidth = max(defaultWidth,widthSpecSize)
+            MeasureSpec.UNSPECIFIED -> {
+                mWidth = max(defaultWidth, widthSpecSize)
             }
         }
         return mWidth
     }
 
-    private fun measureHeight(defaultHeight:Int, measureSpec:Int):Int{
+    private fun measureHeight(defaultHeight: Int, measureSpec: Int): Int {
         val heightSpecMode = MeasureSpec.getMode(measureSpec)
         val heightSpecSize = MeasureSpec.getSize(measureSpec)
 
         var totalHeight = 0
-        when(heightSpecMode){
-            MeasureSpec.AT_MOST ->{
+        when (heightSpecMode) {
+            MeasureSpec.AT_MOST -> {
                 isWrap = true
-                for (i: Int in 0 until A_Z.length) {
-                    totalHeight += (paint.measureText(A_Z[i].toString()) + DisplayUtils.dip2px(context,12f)).toInt()
+                for (i: Int in 0 until A_Z.size) {
+                    totalHeight += (paint.measureText(A_Z[i].toString()) + DisplayUtils.dip2px(context, 12f)).toInt()
                 }
             }
-            MeasureSpec.EXACTLY ->{
+            MeasureSpec.EXACTLY -> {
                 totalHeight = heightSpecSize
             }
-            MeasureSpec.UNSPECIFIED ->{
-                totalHeight = max(defaultHeight,heightSpecSize)
+            MeasureSpec.UNSPECIFIED -> {
+                totalHeight = max(defaultHeight, heightSpecSize)
             }
         }
         return totalHeight
     }
-
 
 
     override fun onDraw(canvas: Canvas?) {
@@ -144,13 +143,13 @@ class SideView : View {
         val mHeight = height
         val mWidth = width
         var singleHeight = 0
-        singleHeight = if (isWrap){
-            mHeight / A_Z.length
-        }else{
-            mHeight / A_Z.length - 2
+        singleHeight = if (isWrap) {
+            mHeight / A_Z.size
+        } else {
+            mHeight / A_Z.size - 2
         }
 
-        for (i: Int in 0 until A_Z.length) {
+        for (i: Int in 0 until A_Z.size) {
             paint.color = unChooseTextColor
             paint.typeface = Typeface.DEFAULT_BOLD
             paint.isAntiAlias = true
@@ -160,15 +159,15 @@ class SideView : View {
             if (choose == i) {
                 paint.color = chooseBGColor
                 paint.style = Paint.Style.FILL
-                val circleX = xPos + paint.measureText(A_Z[i].toString()) / 2
-                val circleY = yPos - paint.measureText(A_Z[i].toString()) / 2
+                val circleX = xPos + paint.measureText(A_Z[i]) / 2
+                val circleY = yPos - paint.measureText(A_Z[i]) / 2
                 canvas.drawCircle(circleX, circleY, (singleHeight / 2).toFloat(), paint)
                 paint.color = chooseTextColor
             }
-            if (i == 0){
-                canvas.drawText(A_Z[i].toString(), xPos, yPos + 7, paint)
-            }else{
-                canvas.drawText(A_Z[i].toString(), xPos, yPos, paint)
+            if (i == 0) {
+                canvas.drawText(A_Z[i], xPos, yPos + 7, paint)
+            } else {
+                canvas.drawText(A_Z[i], xPos, yPos, paint)
             }
             paint.reset()
         }
@@ -182,13 +181,13 @@ class SideView : View {
         val y = event.y
         val oldChoose = choose
         val listener = this.listener ?: throw Exception("SideView's onTouchListener nut be null")
-        val c = ((y / height) * A_Z.length).toInt()
+        val c = ((y / height) * A_Z.size).toInt()
         Log.d(TAG, c.toString())
         if (action == MotionEvent.ACTION_UP) {
-
+            listener.onNotTouching()
         } else {
             if (oldChoose != c) {
-                if (c >= 0 && c < A_Z.length) {
+                if (c >= 0 && c < A_Z.size) {
                     listener.onTouchingLetterChanged(A_Z[c].toString())
                 }
                 choose = c
@@ -204,17 +203,17 @@ class SideView : View {
 
 
     companion object {
-        val A_Z = String(
-            charArrayOf(
-                42.toChar(),'A', 'B', 'C', 'D', 'E', 'F', 'G',
-                'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-                'V', 'W', 'X', 'Y', 'Z')
-//            , 35.toChar()
+        val A_Z = arrayOf(
+            "↑", "☆", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
+            "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
         )
+//            , 35.toChar()
+
 
         interface OnTouchingLetterChangedListener {
             fun onTouchingLetterChanged(str: String)
+
+            fun onNotTouching()
         }
     }
 
