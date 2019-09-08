@@ -12,15 +12,14 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.lifecycle.ViewModelProviders
 import com.example.matechatting.FIRST_MY_INFO_REQUEST_CODE
+import com.example.matechatting.FORGET_REQUEST_CODE
 import com.example.matechatting.R
 import com.example.matechatting.base.BaseActivity
+import com.example.matechatting.databinding.ActivityLoginBinding
+import com.example.matechatting.listener.EditTextTextChangeListener
 import com.example.matechatting.mainprocess.forgetpassword.ForgetPasswordActivity
 import com.example.matechatting.mainprocess.main.MainActivity
-import com.example.matechatting.FORGET_REQUEST_CODE
-import com.example.matechatting.databinding.ActivityLoginBinding
 import com.example.matechatting.mainprocess.myinfo.MyinfoActivity
-import com.example.matechatting.listener.EditTextTextChangeListener
-import com.example.matechatting.mainprocess.forgetpassword.ForgetPasswordActivity.Companion.token
 import com.example.matechatting.utils.InjectorUtils
 import com.example.matechatting.utils.NetworkState
 import com.example.matechatting.utils.ToastUtilWarning
@@ -201,13 +200,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                 LoginState.FIRST -> {
                     val intent = Intent(this, MyinfoActivity::class.java)
                     intent.putExtra("token", list[0])
-                    intent.putExtra("inSchool",list[1].toBoolean())
+                    intent.putExtra("inSchool", list[1].toBoolean())
                     startActivityForResult(intent, FIRST_MY_INFO_REQUEST_CODE)
                 }
                 LoginState.NOT_FIRST -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    setResult(Activity.RESULT_OK, intent)
-                    finish()
+                    viewModel.getUserInfo {
+                        val intent = Intent(this, MainActivity::class.java)
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
+                    }
                 }
             }
         }
@@ -215,7 +216,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("aaa","requestCode$requestCode")
+        Log.d("aaa", "requestCode$requestCode")
         if (resultCode == Activity.RESULT_OK && requestCode == FORGET_REQUEST_CODE && data != null) {
             val account = data.getStringExtra("account") ?: ""
             accountEdit.text = SpannableStringBuilder(account)

@@ -7,27 +7,31 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 
-
 data class BigDirectionBean(
     @SerializedName("direction_name")
     var directionName: String,
     @PrimaryKey
     var id: Int,
+    var isSelect: Boolean = false,
     @Ignore
-    var isSelectCurrent: Boolean = false,
-    var isSelect: Boolean = false
+    var isSelectCurrent: Boolean = false
+
 )
+
 @Entity(tableName = "direction")
 data class DirectionBean(
-    @SerializedName("direction_name")
-    val directionName: String,
     @PrimaryKey
     val id: Int,
+    @SerializedName("direction_name")
+    var directionName: String = "",
     @ColumnInfo(name = "parent_id")
-    var parentId: Int = 0,
+    var parentId: Int = -1,
     var bigDirectionId: Int = 0,
+    @ColumnInfo(name = "is_small")
+    var isSmall: Boolean = false,
     @ColumnInfo(name = "is_select")
     var isSelect: Boolean = false
+
 )
 
 data class SaveDirectionBean(

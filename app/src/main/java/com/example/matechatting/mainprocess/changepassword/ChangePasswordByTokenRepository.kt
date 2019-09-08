@@ -1,8 +1,8 @@
 package com.example.matechatting.mainprocess.changepassword
 
+import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.network.ChangePasswordByTokenService
 import com.example.matechatting.network.IdeaApi
-import com.example.matechatting.base.BaseRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 

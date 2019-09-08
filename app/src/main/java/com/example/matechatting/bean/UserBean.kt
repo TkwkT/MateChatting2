@@ -43,11 +43,16 @@ data class UserBean(
     @ColumnInfo(name = "profile_photo")
     @SerializedName("profile_photo")
     var headImage: String = "",
-    var gender: String = "",
+    @ColumnInfo(name = "is_man")
+    @SerializedName("is_man")
+    var man: Boolean = true,
     @PrimaryKey
     @SerializedName("id")
     @ColumnInfo(name = "id")
-    var id: Int = 0
+    var id: Int = 0,
+    @ColumnInfo(name = "in_school")
+    @SerializedName("in_school")
+    var inSchool: Boolean = false
 ) {
     @ColumnInfo(name = "direction")
     var direction: String = ""
@@ -63,4 +68,6 @@ data class UserBean(
     @ColumnInfo(name = "on_line")
     var onLine: Boolean = false
     var pinyin: String = ""
+    @Ignore
+    var isLast = false
 }

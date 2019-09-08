@@ -9,7 +9,6 @@ import com.example.matechatting.PATH
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.utils.NetworkState
 import com.example.matechatting.utils.isNetworkConnected
-import java.lang.StringBuilder
 
 class MineViewModel(private val repository: MineRepository) : ViewModel() {
     val mineName = ObservableField("未登录")
@@ -18,19 +17,17 @@ class MineViewModel(private val repository: MineRepository) : ViewModel() {
     val defaultSlogan = "快乐生活每一天"
     val defaultName = "未登录"
 
-    fun getMine() {
-        if (isNetworkConnected(MyApplication.getContext()) == NetworkState.NONE) {
-            repository.getMineFromDB {
-                setInfoDB(it)
-            }
-        } else {
-            repository.getMineFromNet {
-                setInfoNet(it)
-            }
+    fun getMine(callback: (String) -> Unit) {
+//        if (isNetworkConnected(MyApplication.getContext()) == NetworkState.NONE) {
+        repository.getMineFromDB {
+            Log.d("aaa", "数据 $it")
+            setInfoDB(it)
+            callback(it.headImage)
         }
-//        repository.getMine {
-//
-//            Log.d("aaa", it.toString())
+//        } else {
+//            repository.getMineFromNet {
+//                setInfoNet(it)
+//            }
 //        }
     }
 
@@ -46,9 +43,12 @@ class MineViewModel(private val repository: MineRepository) : ViewModel() {
             } else {
                 mineSlogan.set(slogan)
             }
-            if (!headImage.isNullOrEmpty()) {
-                mineHeadImage.set(headImage)
-            }
+//            if (headImage.isNotEmpty()) {
+//                Log.d("aaa","head image $headImage")
+//                Log.d("aaa","Mine user id ${MyApplication.getUserId()}")
+//                mineHeadImage.set(headImage)
+//                mineHeadImage.notifyChange()
+//            }
         }
     }
 

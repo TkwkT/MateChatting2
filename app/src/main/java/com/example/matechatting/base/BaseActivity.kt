@@ -16,7 +16,6 @@ import com.example.matechatting.listener.NetworkConnectChangeReceiver
 import com.example.matechatting.myview.SlideFinishLayout
 import com.example.matechatting.utils.NetworkState
 import com.example.matechatting.utils.isNetworkConnected
-import java.util.*
 
 abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     protected lateinit var binding: T

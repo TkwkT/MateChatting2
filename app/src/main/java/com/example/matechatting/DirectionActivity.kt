@@ -2,18 +2,19 @@ package com.example.matechatting
 
 import android.os.Build
 import android.os.Bundle
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.GridView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.matechatting.base.BaseActivity
 import com.example.matechatting.databinding.ActivityDirectionBinding
-
 import com.example.matechatting.utils.statusbar.StatusBarUtil
 
 class DirectionActivity : BaseActivity<ActivityDirectionBinding>() {
-
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var gridView: GridView

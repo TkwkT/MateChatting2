@@ -1,16 +1,12 @@
 package com.example.matechatting.tcpprocess.service
 
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.RemoteCallbackList
 import android.util.Log
 import com.example.matechatting.*
 import com.example.matechatting.bean.ChattingBean
-import com.example.matechatting.database.AppDatabase
-import com.example.matechatting.database.UserInfoDao
-import com.example.matechatting.mainprocess.mine.MineRepository
 import com.example.matechatting.tcpprocess.NettyClient
 import com.example.matechatting.tcpprocess.repository.TCPRepository
 import com.example.matechatting.tcpprocess.utils.MessageFactory
@@ -55,6 +51,7 @@ class NetService : Service() {
         TCPRepository.changeUserState(4, friendId) {
             val message = MessageFactory.acceptFriendResponse(friendId)
             NettyClient.channel?.writeAndFlush(message)
+            NettyClient.channel?.writeAndFlush(MessageFactory.stringMessage("我们已经成为好友啦！", friendId))
             val intent = Intent(ACCEPT_FRIEND_ACTION)
             intent.putExtra("subject", 3)
             this.sendBroadcast(intent)
@@ -62,7 +59,7 @@ class NetService : Service() {
     }
 
     private fun sendMessage(message: String?, otherId: Int) {
-        NettyClient.channel?.writeAndFlush(MessageFactory.stringMessage(message!!,otherId))
+        NettyClient.channel?.writeAndFlush(MessageFactory.stringMessage(message!!, otherId))
     }
 
     inner class NetBinder : TCPInterface.Stub() {

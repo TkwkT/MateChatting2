@@ -51,6 +51,12 @@ class ResultFragment : BaseFragment() {
         recyclerView = binding.searchResultRecycler
     }
 
+    override fun onResume() {
+        super.onResume()
+        init()
+        setCallbackToAdapter()
+    }
+
     private fun initRecycler() {
         adapter = HomeSearchResultAdapter(callbackPersonButton, callbackPersonLayout, { loadMore() })
         val array = (requireActivity() as HomeSearchActivity).resultArray
@@ -78,7 +84,13 @@ class ResultFragment : BaseFragment() {
         return ++page
     }
 
+    private fun setCallbackToAdapter() {
+        adapter.callbackPersonButton = callbackPersonButton
+        adapter.callbackPersonLayout = callbackPersonLayout
+    }
+
     override fun initLogin() {
+        Log.d("aaa","initLogin")
         callbackPersonButton = {
             Log.d("aaa", "点击的id $it")
             MainActivity.service?.addFriend(it, UUID.randomUUID().toString())

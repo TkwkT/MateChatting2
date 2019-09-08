@@ -19,6 +19,7 @@ import java.sql.Timestamp
 object ReadMessage {
 
     fun readMessage(message: PostCardMessage.Message, context: Context) {
+        Log.d("aaa", "message ${message.subject}")
         when (message.subject) {
             //更新数据集合
             //当前在线好友集合
@@ -51,13 +52,14 @@ object ReadMessage {
             }
             //好友同意
             ACCEPT_FRIEND_RESPONSE -> {
-                acceptFriendResponce(message, context)
+                acceptFriendResponse(message, context)
             }
         }
     }
 
     private fun error(message: PostCardMessage.Message, context: Context) {
         val error = message.payload.toStringUtf8()
+        Log.d("aaa", error.toString())
         when (error) {
             //Toast系列
             //加好友请求已发送过
@@ -69,6 +71,7 @@ object ReadMessage {
                 hasBeenFriendWithAcceptUser(message, context)
             }
             CANT_ADD_YOUR_SELF -> {
+                Log.d("aaa", "不能加自己为好友")
                 canNotAddYourself(message, context)
             }
             //对方已经向你发起请求
@@ -151,19 +154,33 @@ object ReadMessage {
         }
     }
 
-    private fun acceptFriendResponce(message: PostCardMessage.Message, context: Context){
+    private fun acceptFriendResponse(message: PostCardMessage.Message, context: Context) {
         val id = message.sendUserId
-        TCPRepository.changeUserState(3,id){
-            val intent = Intent(ACCEPT_FRIEND_ACTION)
-            intent.putExtra("subject", HAS_NEW_FRIEND)
-            context.sendBroadcast(intent)
+        Log.d("aaa", "好友同意添加 $id")
+        TCPRepository.getUserInfo(id) {
+            if (it) {
+                TCPRepository.changeUserState(3, id) {
+                    Log.d("aaa","changeUserState ")
+                    val intent = Intent(ACCEPT_FRIEND_ACTION)
+                    intent.putExtra("subject", HAS_NEW_FRIEND)
+                    context.sendBroadcast(intent)
+                }
+            } else {
+                TCPRepository.getAndSaveFriendInfo(3, id) {
+                    Log.d("aaa","getAndSaveFriendInfo ")
+                    val intent = Intent(ACCEPT_FRIEND_ACTION)
+                    intent.putExtra("subject", HAS_NEW_FRIEND)
+                    context.sendBroadcast(intent)
+                }
+            }
         }
     }
 
 
     private fun addFriendRequest(message: PostCardMessage.Message, context: Context) {
         val id = message.sendUserId
-        TCPRepository.getAndSaveFriendInfo(id) {
+        Log.d("aaa", "好友同意添加 $message")
+        TCPRepository.getAndSaveFriendInfo(2, id) {
             val intent = Intent(ACCEPT_FRIEND_ACTION)
             intent.putExtra("subject", HAS_NEW_FRIEND)
             context.sendBroadcast(intent)

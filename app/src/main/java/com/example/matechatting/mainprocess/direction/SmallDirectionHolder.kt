@@ -46,32 +46,50 @@ class SmallDirectionHolder(private val bigDirectionId: Int, private val binding:
             if (!s.directionName.isNullOrEmpty()) {
                 textView.text = s.directionName
             }
+            if (s.isSelect){
+                layout.background = context.getDrawable(R.drawable.shape_direction_lable_selected)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    textView.setTextColor(context.getColor(R.color.text_ffffff))
+                }
+            }else{
+                layout.background = context.getDrawable(R.drawable.shape_direction_lable_unselected)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    textView.setTextColor(context.getColor(R.color.text_555555))
+                }
+            }
             layout.setOnClickListener {
 
                 if (!DirectionNewActivity.saveMap.containsKey(s.id) && DirectionNewActivity.saveMap.size() >= 3) {
                     ToastUtilWarning().setToast(context, "最多只能选择三个")
                 } else {
-                    if (s.isSelect) {
-                        s.isSelect = false
-                        layout.background = context.getDrawable(R.drawable.shape_direction_lable_unselected)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            textView.setTextColor(context.getColor(R.color.text_555555))
-                        }
-                        DirectionNewActivity.saveMap.delete(s.id)
-                    } else {
-                        s.isSelect = true
-                        layout.background = context.getDrawable(R.drawable.shape_direction_lable_selected)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            textView.setTextColor(context.getColor(R.color.text_ffffff))
-                        }
-                        DirectionNewActivity.saveMap.put(s.id, bigDirectionId)
-                    }
+                    setBackground(s, layout, textView)
                 }
                 DirectionNewActivity.clickCallback()
             }
             binding.itemDirectionFlowLayout.addView(view)
         }
     }
+
+    private fun setBackground(s: Direction, layout: FrameLayout, textView: TextView) {
+        if (s.isSelect) {
+            s.isSelect = false
+            layout.background = context.getDrawable(R.drawable.shape_direction_lable_unselected)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                textView.setTextColor(context.getColor(R.color.text_555555))
+            }
+            DirectionNewActivity.saveMap.delete(s.id)
+            DirectionNewActivity.resultMap.delete(s.id)
+        } else {
+            s.isSelect = true
+            layout.background = context.getDrawable(R.drawable.shape_direction_lable_selected)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                textView.setTextColor(context.getColor(R.color.text_ffffff))
+            }
+            DirectionNewActivity.saveMap.put(s.id, bigDirectionId)
+            DirectionNewActivity.resultMap.put(s.id, s.directionName)
+        }
+    }
+
 
     companion object {
         private var num = 0

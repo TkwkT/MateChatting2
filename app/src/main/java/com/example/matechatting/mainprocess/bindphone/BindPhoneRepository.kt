@@ -1,9 +1,9 @@
 package com.example.matechatting.mainprocess.bindphone
 
+import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.network.CheckCodeService
 import com.example.matechatting.network.IdeaApi
 import com.example.matechatting.network.SendMessageService
-import com.example.matechatting.base.BaseRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 

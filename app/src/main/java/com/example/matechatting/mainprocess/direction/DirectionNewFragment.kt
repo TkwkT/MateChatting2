@@ -4,17 +4,16 @@ package com.example.matechatting.mainprocess.direction
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.matechatting.R
 import com.example.matechatting.utils.InjectorUtils
 import com.nex3z.flowlayout.FlowLayout
@@ -29,7 +28,7 @@ class DirectionNewFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bigDirectionId = arguments?.getInt("big_direction_id") ?: 0
+        bigDirectionId = arguments?.getInt("big_direction_id") ?:throw Exception("id is 0")
         Log.d("bbb", "onCreate$bigDirectionId")
     }
 
@@ -75,6 +74,7 @@ class DirectionNewFragment : Fragment() {
 
     private fun initData() {
         viewModel.getSmallDirection(bigDirectionId) {
+            Log.d("aaa","搜索总结果 $it")
             if (!it.normalDirectionList.isNullOrEmpty()) {
                 adapter.freshData(it.normalDirectionList!!)
             }

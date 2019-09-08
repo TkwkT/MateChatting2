@@ -3,14 +3,11 @@ package com.example.matechatting.mainprocess.homesearch
 import android.util.Log
 import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.bean.SearchBean
-import com.example.matechatting.bean.UserBean
 import com.example.matechatting.network.IdeaApi
 import com.example.matechatting.network.SearchService
 import com.example.matechatting.utils.runOnNewThread
-import io.netty.util.internal.StringUtil.isNullOrEmpty
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.lang.StringBuilder
 
 class HomeSearchRepository : BaseRepository {
 
@@ -25,7 +22,9 @@ class HomeSearchRepository : BaseRepository {
                 } else {
                     callback(ArrayList())
                 }
-            }, {})
+            }, {
+                callback(ArrayList())
+            })
     }
 
 

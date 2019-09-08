@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
@@ -15,7 +16,6 @@ import com.example.matechatting.base.BaseActivity
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.databinding.ActivityInfoDetailBinding
 import com.example.matechatting.mainprocess.chatting.ChattingActivity
-import com.example.matechatting.mainprocess.homesearch.HomeSearchActivity
 import com.example.matechatting.mainprocess.main.MainActivity
 import com.example.matechatting.utils.InjectorUtils
 import com.example.matechatting.utils.ToastUtilWarning
@@ -47,6 +47,7 @@ class InfoDetailActivity : BaseActivity<ActivityInfoDetailBinding>() {
             StatusBarUtil.setStatusBarColor(this, this.getColor(R.color.bg_ffffff))
         }
         canSlideFinish(true)
+
         initBinding()
         initView()
         initBack()
@@ -131,7 +132,6 @@ class InfoDetailActivity : BaseActivity<ActivityInfoDetailBinding>() {
             finish()
         }
     }
-
 
     override fun getLayoutId(): Int {
         return R.layout.activity_info_detail

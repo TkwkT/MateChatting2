@@ -17,15 +17,11 @@ import com.example.matechatting.base.BaseFragment
 import com.example.matechatting.databinding.ActivityMainBinding
 import com.example.matechatting.mainprocess.home.HomeFragment
 import com.example.matechatting.mainprocess.milelist.MileListFragment
-import com.example.matechatting.mainprocess.milelist.MileListViewModel
 import com.example.matechatting.mainprocess.mine.MineFragment
-import com.example.matechatting.tcpprocess.NettyClient
 import com.example.matechatting.tcpprocess.service.NetService
 import com.example.matechatting.utils.InjectorUtils
-import com.example.matechatting.utils.runOnNewThread
 import com.example.matechatting.utils.statusbar.StatusBarUtil
 import com.google.android.material.tabs.TabLayout
-import kotlin.random.Random
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>(), MainConstValue {
@@ -48,7 +44,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainConstValue {
         initViewPager()
         initTabLayout()
         listenNetwork()
-
+        Log.d("aaa","oncreate")
     }
 
     private fun init() {
@@ -126,15 +122,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainConstValue {
                 intent.putExtra("subject", 3)
                 this.sendBroadcast(intent)
             }
+            viewModel.getMineInfo()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == LOGIN_REQUEST_CODE && data != null) {
+            Log.d("aaa","onActivityResult")
             getLoginState()
-        } else if (resultCode == Activity.RESULT_OK && requestCode == ALBUM_REQUEST_CODE && data != null) {
-            fragmentList[2].onActivityResult(requestCode, resultCode, data)
         }
     }
 
@@ -179,8 +175,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainConstValue {
 
     companion object {
         var service: TCPInterface? = null
-        var pageIsLoading = true
-
     }
 }
 

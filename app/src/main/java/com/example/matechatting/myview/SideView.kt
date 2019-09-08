@@ -8,12 +8,11 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.Log
-import android.view.View
 import android.util.TypedValue
 import android.view.MotionEvent
+import android.view.View
 import com.example.matechatting.R
 import com.example.matechatting.utils.DisplayUtils
-import java.lang.Exception
 import kotlin.math.max
 
 

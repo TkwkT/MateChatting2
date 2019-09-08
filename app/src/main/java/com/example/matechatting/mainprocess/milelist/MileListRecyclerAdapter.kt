@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.matechatting.FRIEND
+import com.example.matechatting.NEW_CHATTING
+import com.example.matechatting.NEW_FRIEND
 import com.example.matechatting.R
 import com.example.matechatting.base.BaseHolder
 import com.example.matechatting.bean.UserBean
@@ -57,27 +60,30 @@ class MileListRecyclerAdapter(
         newFriendArray.addAll(list)
     }
 
-    fun freshNewFriend(bean: UserBean) {
-        newFriendArray.add(bean)
-    }
-
     fun freshNewChattings(list: List<UserBean>) {
         newChattingArray.clear()
         list[0].first = true
         newChattingArray.addAll(list)
     }
 
-    fun frashNewChatting(bean: UserBean) {
-        newChattingArray.add(bean)
-    }
-
     fun frashFriends(list: List<UserBean>) {
         friendArray.clear()
-        friendArray.addAll(list)
+        friendArray.addAll(setIsFirst(list))
     }
 
-    fun frashFriend(bean: UserBean) {
-        friendArray.add(bean)
+    fun setIsFirst(list: List<UserBean>): List<UserBean> {
+        list[0].first = true
+        list[0].isLast = true
+        if (list.size > 1){
+            list[0].isLast = false
+            for (i: Int in 1 until list.size) {
+                Log.d("aaa", "bean.pinyin ${list[i].pinyin} list[i - 1].pinyin ${list[i - 1].pinyin}")
+                list[i].first = list[i].pinyin != list[i - 1].pinyin
+                list[i].isLast = false
+            }
+            list.last().isLast = true
+        }
+        return list
     }
 
     override fun getItemCount(): Int {
@@ -134,8 +140,24 @@ class MileListRecyclerAdapter(
         }
     }
 
-    fun selectFirst() {
-
+    fun scrollToPosition(str: String): Int {
+        return if (str == "↑") {
+            0
+        } else if (str == "☆") {
+            newFriendArray.size
+        } else {
+            var position = newFriendArray.size + newChattingArray.size
+            for ((i, user: UserBean) in friendArray.withIndex()) {
+                if (user.pinyin == str) {
+                    position = i + newFriendArray.size + newChattingArray.size
+                    Log.d("aaa", "position  $i")
+                    break
+                } else {
+                    position = -1
+                }
+            }
+            position
+        }
     }
 
     companion object {

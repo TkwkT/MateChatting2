@@ -7,6 +7,10 @@ import com.example.matechatting.utils.isNetworkConnected
 
 class LoginViewModel(private val repository: LoginRepository) : ViewModel() {
 
+    fun getUserInfo(callback: () -> Unit){
+        repository.getMineFromNet(callback)
+    }
+
     fun checkAccount(account: String?, password: String?, callback: (state: Int,List<String>) -> Unit) {
         if (account.isNullOrEmpty()) {
             callback(LoginState.ACCOUNT_NULL, arrayListOf(""))

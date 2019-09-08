@@ -4,8 +4,7 @@ import android.util.Log
 import com.example.matechatting.tcpprocess.beans.Constant
 import com.example.matechatting.tcpprocess.beans.PostCardMessage
 import com.google.protobuf.ByteString
-
-import java.util.UUID
+import java.util.*
 
 object MessageFactory {
 

@@ -7,6 +7,7 @@ import com.example.matechatting.database.UserInfoDao
 import com.example.matechatting.network.GetUserByIdService
 import com.example.matechatting.network.IdeaApi
 import com.example.matechatting.utils.NetworkState
+import com.example.matechatting.utils.PinyinUtil
 import com.example.matechatting.utils.isNetworkConnected
 import com.example.matechatting.utils.runOnNewThread
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -45,6 +46,7 @@ class InfoDetailRepository(private val userInfoDao: UserInfoDao) : BaseRepositor
 
     private fun saveInDB(userBean: UserBean) {
         runOnNewThread {
+            userBean.pinyin = PinyinUtil.getFirstHeadWordChar(userBean.name)
             userInfoDao.insertUserInfo(userBean)
         }
     }

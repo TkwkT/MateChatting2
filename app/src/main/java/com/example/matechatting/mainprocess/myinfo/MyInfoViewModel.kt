@@ -4,12 +4,9 @@ import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.example.matechatting.BASE_URL
-import com.example.matechatting.MyApplication
 import com.example.matechatting.PATH
 import com.example.matechatting.bean.UserBean
-import com.example.matechatting.utils.NetworkState
-import com.example.matechatting.utils.isNetworkConnected
-import java.lang.StringBuilder
+import com.example.matechatting.mainprocess.direction.DirectionNewActivity
 
 class MyInfoViewModel(private val repository: MyInfoRepository) : ViewModel() {
     val myInfoName = ObservableField<String>("未填写")
@@ -28,36 +25,75 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : ViewModel() {
     val myInfoDefailtSlogan = "快乐生活每一天"
 
     fun getMyInfo(callback: (UserBean) -> Unit, token: String = "") {
-        if (isNetworkConnected(MyApplication.getContext()) == NetworkState.NONE) {
-            Log.d("aaa", "info")
+//        if (isNetworkConnected(MyApplication.getContext()) == NetworkState.NONE) {
+        Log.d("aaa","token $token")
+        if (token.isEmpty()) {
             repository.getMyInfoFromDB {
+                Log.d("aaa","getMyInfo $it")
                 setInfoDB(it)
                 callback(it)
             }
         } else {
+            Log.d("aaa","网络")
             repository.getMyInfoFromNet({
                 setInfoNet(it)
                 callback(it)
             }, token)
         }
+
+//        } else {
+
+//        }
     }
 
     private fun setInfoDB(userBean: UserBean) {
         userBean.apply {
-            Log.d("aaa", "setInfoDB $this")
             myInfoName.set(name)
             myInfoMajor.set(majorName)
             myInfoGraduate.set(graduation)
             myInfoCompany.set(company)
             myInfoJob.set(job)
             myInfoDirection.set(direction)
-            myInfoQQ.set(qqAccount.toString())
+            if (qqAccount.toString().isEmpty() || qqAccount == 0) {
+                myInfoQQ.set("")
+            } else {
+                myInfoQQ.set(qqAccount.toString())
+            }
             myInfoWeixin.set(wechatAccount)
             myInfoEmile.set(email)
             myInfoCity.set(city)
             myInfoSlogan.set(slogan)
-            if (!headImage.isNullOrEmpty()) {
-                myInfoHeadImage.set(headImage)
+//            if (!headImage.isNullOrEmpty()) {
+//                myInfoHeadImage.set(headImage)
+//                myInfoHeadImage.notifyChange()
+//            }
+        }
+    }
+
+    fun getDirection(direction: String, callback: () -> Unit = {}) {
+        if (direction.isEmpty()) {
+            callback()
+            return
+        } else {
+            Log.d("aaa", "方向 $direction")
+            val a = direction.split(" ")
+            for ((i, str: String) in a.withIndex()) {
+                repository.getDirectionByName(str) { small ->
+                    Log.d("aaa", "是否选中 $small")
+                    if (small.directionName.isNotEmpty()) {
+                        DirectionNewActivity.saveMap.put(small.id, small.bigDirectionId)
+                        Log.d("aaa", "方向传参 ${DirectionNewActivity.saveMap}")
+                        small.isSelect = true
+                        repository.updateDirection(small)
+                        repository.getDirectionById(small.bigDirectionId) { big ->
+                            big.isSelect = true
+                            repository.updateDirection(big)
+                        }
+                    }
+                }
+                if (i == a.size - 1){
+                    callback()
+                }
             }
         }
     }
@@ -92,7 +128,6 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : ViewModel() {
     }
 
     fun saveData(userBean: UserBean, callback: () -> Unit, token: String = "") {
-        Log.d("aaa", "saveData")
         repository.saveMyInfo(userBean, callback, token)
     }
 }

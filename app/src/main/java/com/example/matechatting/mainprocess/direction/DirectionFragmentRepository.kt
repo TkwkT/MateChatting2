@@ -8,11 +8,8 @@ import com.example.matechatting.bean.DirectionBean
 import com.example.matechatting.bean.SaveDirectionBean
 import com.example.matechatting.bean.SmallDirectionBean
 import com.example.matechatting.database.DirectionDao
-import com.example.matechatting.database.UserInfoDao
-import com.example.matechatting.mainprocess.milelist.MileListRepository
 import com.example.matechatting.network.GetSmallDirectionService
 import com.example.matechatting.network.IdeaApi
-import com.example.matechatting.utils.runOnNewThread
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -20,68 +17,131 @@ class DirectionFragmentRepository(private val directionDao: DirectionDao) : Base
 
     @SuppressLint("CheckResult")
     fun getSmallDirection(bigDirectionId: Int, callback: (SaveDirectionBean) -> Unit) {
-        IdeaApi.getApiService(GetSmallDirectionService::class.java).geySmallDirection(bigDirectionId)
+        IdeaApi.getApiService(GetSmallDirectionService::class.java, false).geySmallDirection(bigDirectionId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 val saveDirectionBean = smallToSave(it)
-                Log.d("aaa", "getSmallDirection" + saveDirectionBean.toString())
+                Log.d("bbb", "getSmallDirection" + saveDirectionBean.toString())
                 saveBean(saveDirectionBean)
                 callback(saveDirectionBean)
             }, {})
     }
 
     private fun saveBean(saveDirectionBean: SaveDirectionBean) {
-        if (saveDirectionBean.normalDirectionList.isNullOrEmpty()) {
+        val bigId = saveDirectionBean.bigDirectionId
+        if (!saveDirectionBean.normalDirectionList.isNullOrEmpty()) {
+            Log.d("aaa", "saveBean 调用")
             for (normal: SaveDirectionBean.NormalDirection in saveDirectionBean.normalDirectionList!!) {
-                if (normal.direction == null && !normal.smallDirection.isNullOrEmpty()) { //只有小方向
+                if (normal.direction?.id == 0 && !normal.smallDirection.isNullOrEmpty()) { //只有小方向
                     for (small: Direction in normal.smallDirection!!) {
                         small.apply {
                             val bean = DirectionBean(
-                                directionName,
                                 id,
-                                saveDirectionBean.bigDirectionId,
-                                saveDirectionBean.bigDirectionId
+                                directionName,
+                                bigId,
+                                bigId,
+                                true
                             )
-                            runOnNewThread {
-                                directionDao.insertDirection(bean)
-                            }
+                            insertDirection(bean)
                             //插入数据库
                         }
                     }
                 } else if (normal.direction != null && !normal.smallDirection.isNullOrEmpty()) { //中方向和小方向
                     val normalId = normal.direction!!.id
                     normal.direction?.apply {
-                        //中标签无的大标签id为0
-                        val bean = DirectionBean(directionName, id, saveDirectionBean.bigDirectionId)
-                        runOnNewThread {
-                            directionDao.insertDirection(bean)
-                        }
+                        //中标签无的bigDirectionId大标签id为0
+                        val bean = DirectionBean(id, directionName, saveDirectionBean.bigDirectionId)
+                        insertDirection(bean)
                         //插入数据库
                     }
                     for (small: Direction in normal.smallDirection!!) {
                         small.apply {
-                            val bean = DirectionBean(directionName, id, normalId, saveDirectionBean.bigDirectionId)
-                            runOnNewThread {
-                                directionDao.insertDirection(bean)
-                            }
+                            val bean =
+                                DirectionBean(id, directionName, normalId, saveDirectionBean.bigDirectionId, true)
+                            insertDirection(bean)
                             //插入数据库
                         }
                     }
-                }else{
+                } else {
 
                 }
             }
         }
     }
 
-    fun selectDirection(bigId:Int,callback: (SaveDirectionBean) -> Unit){
+    private fun insertDirection(directionBean: DirectionBean) {
+        Log.d("aaa", "标签插入的bean $directionBean")
+        directionDao.insertDirection(directionBean)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Log.d("aaa", "标签插入成功 $it")
+            }, {})
+    }
+
+    fun selectDirection(bigId: Int, callback: (SaveDirectionBean) -> Unit) {
+        val normalArray = ArrayList<SaveDirectionBean.NormalDirection>()
+        Log.d("aaa", "大方向id $bigId")
         directionDao.selectDirectionByParent(bigId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
+                Log.d("aaa", "搜索结果 $it")
+                if (!(it.isNullOrEmpty() || it[0].isSmall)) { //有中方向的标签
+                    var i = 0
+                    for (normal: DirectionBean in it) {
+                        selectSmellDirection(normal.id) { small ->
+                            Log.d("aaa", "小标签搜索结果 $small")
+                            if (!small.isNullOrEmpty() && small[0].isSmall) {
+                                val normalBean = Direction(normal.directionName, normal.id)
+                                val smallDirection = ArrayList<Direction>()
+                                for (bean: DirectionBean in small) {
+                                    val smallBean = Direction(bean.directionName, bean.id, bean.isSelect)
+                                    Log.d("aaa","seallBean $smallBean")
+                                    smallDirection.add(smallBean)
+                                }
+                                val normal = SaveDirectionBean.NormalDirection(normalBean, smallDirection)
+                                normalArray.add(normal)
+                                ++i
+                                if (i == it.size) {
+                                    val save = SaveDirectionBean(bigId, normalArray)
+                                    callback(save)
+                                }
+                                Log.d("aaa", "中标签的大小 ${normalArray.size}")
+                            }
 
-            },{})
+                        }
+
+                    }
+                } else if (!it.isNullOrEmpty()) { //只有小标签
+                    val normalBean = Direction()
+                    val smallDirection = ArrayList<Direction>()
+                    for (bean: DirectionBean in it) {
+                        val smallBean = Direction(bean.directionName, bean.id, bean.isSelect)
+                        smallDirection.add(smallBean)
+                    }
+                    val normal = SaveDirectionBean.NormalDirection(normalBean, smallDirection)
+                    val save = SaveDirectionBean(bigId, arrayListOf(normal))
+                    callback(save)
+                } else {
+                    callback(SaveDirectionBean())
+                }
+                return@subscribe
+            }, {
+                callback(SaveDirectionBean())
+            })
+    }
+
+    private fun selectSmellDirection(bigId: Int, callback: (List<DirectionBean>) -> Unit) {
+        directionDao.selectDirectionByParent(bigId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                if (!it.isNullOrEmpty() && it[0].isSmall) {
+                    callback(it)
+                }
+            }, {})
     }
 
     private fun smallToSave(smallDirectionBean: SmallDirectionBean): SaveDirectionBean {

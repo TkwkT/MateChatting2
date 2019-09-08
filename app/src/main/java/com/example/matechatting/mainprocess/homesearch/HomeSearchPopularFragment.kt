@@ -3,13 +3,12 @@ package com.example.matechatting.mainprocess.homesearch
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-
+import androidx.fragment.app.Fragment
 import com.example.matechatting.R
 import com.nex3z.flowlayout.FlowLayout
 

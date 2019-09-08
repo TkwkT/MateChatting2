@@ -2,8 +2,6 @@ package com.example.matechatting.mainprocess.changepassword
 
 import androidx.lifecycle.ViewModel
 import com.example.matechatting.MyApplication
-import com.example.matechatting.utils.NetworkState
-import com.example.matechatting.utils.isNetworkConnected
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.AGAIN_ERROR
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.AGAIN_NULL
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.ERROR
@@ -16,6 +14,8 @@ import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.C
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.OK
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.OLD_NULL
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.regex
+import com.example.matechatting.utils.NetworkState
+import com.example.matechatting.utils.isNetworkConnected
 
 class ChangePasswordByTokenViewModel(private val repository: ChangePasswordByTokenRepository) : ViewModel() {
 

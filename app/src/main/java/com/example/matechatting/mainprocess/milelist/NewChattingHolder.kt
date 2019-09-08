@@ -1,10 +1,8 @@
 package com.example.matechatting.mainprocess.milelist
 
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
 import com.example.matechatting.base.BaseHolder
-import com.example.matechatting.bean.MileItemBean
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.databinding.ItemMileListNewChattingBinding
 
@@ -16,6 +14,8 @@ class NewChattingHolder(private val binding: ItemMileListNewChattingBinding) : B
                 if (bean.first) {
                     mileListTitle.visibility = View.VISIBLE
                     mileListTitle.text = "新会话"
+                }else{
+                    mileListTitle.visibility = View.GONE
                 }
                 itemFriendName.text = bean.name
                 itemFriendGraduate.text = bean.graduation

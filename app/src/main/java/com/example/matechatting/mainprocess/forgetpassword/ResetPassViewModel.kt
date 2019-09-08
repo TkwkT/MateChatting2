@@ -3,8 +3,8 @@ package com.example.matechatting.mainprocess.forgetpassword
 import androidx.lifecycle.ViewModel
 import com.example.matechatting.MyApplication
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState
-import com.example.matechatting.utils.NetworkState
 import com.example.matechatting.network.OtherTokenInterceptor
+import com.example.matechatting.utils.NetworkState
 import com.example.matechatting.utils.isNetworkConnected
 
 class ResetPassViewModel(private val repository: ResetPassRepository) :ViewModel(){

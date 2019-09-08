@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.matechatting.CLIP_REQUEST_CODE
 import com.example.matechatting.R
 import com.example.matechatting.base.BaseActivity
-import com.example.matechatting.CLIP_REQUEST_CODE
 import com.example.matechatting.databinding.ActivityAlbumBinding
 import com.example.matechatting.mainprocess.cliphead.ClipActivity
 import com.example.matechatting.utils.AlbumImage

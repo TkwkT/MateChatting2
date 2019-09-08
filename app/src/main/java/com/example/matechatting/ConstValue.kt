@@ -1,8 +1,5 @@
 package com.example.matechatting
 
-import android.content.BroadcastReceiver
-import com.example.matechatting.R
-
 //从相册选择页面返回数据的请求码
 const val ALBUM_REQUEST_CODE = 0x111
 //从裁剪页面返回给选择页面的请求码
@@ -18,10 +15,11 @@ const val FORGET_REQUEST_CODE = 0x132
 //第一次登陆从我的信息页返回登录页请求码
 const val FIRST_MY_INFO_REQUEST_CODE = 0x133
 
-const val BASE_URL = "http://rujfjc.natappfree.cc"
+const val BASE_URL = "http://39.100.233.149:8081"
+const val MORE_BASE = "/postcard"
 const val PATH = "/static/"
-const val HOST = "server.natappfree.cc"
-const val PORT = 37446
+const val HOST = "39.100.233.149"
+const val PORT = 8159
 var PAGE = ArrayList<Int>()
 /**
  * 广播

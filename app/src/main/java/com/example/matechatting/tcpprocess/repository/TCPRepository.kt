@@ -1,6 +1,5 @@
 package com.example.matechatting.tcpprocess.repository
 
-import android.util.Log
 import com.example.matechatting.MyApplication
 import com.example.matechatting.bean.ChattingBean
 import com.example.matechatting.bean.UserBean
@@ -13,13 +12,24 @@ import io.reactivex.schedulers.Schedulers
 
 object TCPRepository {
 
-    fun getAndSaveFriendInfo(id: Int, callback: () -> Unit) {
+    fun getUserInfo(id: Int, callback: (Boolean) -> Unit) {
+        AppDatabase.getInstance(MyApplication.getContext()).userInfoDao().getUserInfo(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                callback(true)
+            }, {
+                callback(false)
+            })
+    }
+
+    fun getAndSaveFriendInfo(state: Int, id: Int, callback: () -> Unit) {
         IdeaApi.getApiService(GetUserByIdService::class.java).getUser(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 val info = setInfo(it)
-                info.state = 2
+                info.state = state
                 saveNewFriendInDB(info, callback)
             }, {})
     }
@@ -52,6 +62,7 @@ object TCPRepository {
     }
 
     fun saveNewFriendInDB(userBean: UserBean, callback: () -> Unit) {
+        userBean.pinyin = PinyinUtil.getFirstHeadWordChar(userBean.name)
         AppDatabase.getInstance(MyApplication.getContext()).userInfoDao().insertUserInfo(userBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -78,7 +89,7 @@ object TCPRepository {
             }, {})
     }
 
-    fun getAllIdFromDB( callback: (List<Int>) -> Unit) {
+    fun getAllIdFromDB(callback: (List<Int>) -> Unit) {
         AppDatabase.getInstance(MyApplication.getContext()).userInfoDao().getAllFriendId()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

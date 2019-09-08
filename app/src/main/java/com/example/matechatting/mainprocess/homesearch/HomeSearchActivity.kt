@@ -1,10 +1,13 @@
 package com.example.matechatting.mainprocess.homesearch
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.View
@@ -17,11 +20,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.matechatting.LOGIN_REQUEST_CODE
 import com.example.matechatting.R
+import com.example.matechatting.TCPInterface
 import com.example.matechatting.base.BaseActivity
 import com.example.matechatting.base.BaseFragment
 import com.example.matechatting.bean.SearchBean
 import com.example.matechatting.databinding.ActivitySearchBinding
 import com.example.matechatting.listener.EditTextTextChangeListener
+import com.example.matechatting.mainprocess.main.MainActivity
+import com.example.matechatting.tcpprocess.service.NetService
 import com.example.matechatting.utils.InjectorUtils
 import com.example.matechatting.utils.NetworkState
 import com.example.matechatting.utils.ToastUtilWarning
@@ -120,6 +126,7 @@ class HomeSearchActivity : BaseActivity<ActivitySearchBinding>() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == LOGIN_REQUEST_CODE && data != null) {
             getLoginState()
+
         }
     }
 
@@ -128,6 +135,7 @@ class HomeSearchActivity : BaseActivity<ActivitySearchBinding>() {
         BaseFragment.isLogin = sp.getBoolean("isLogin", false)
         val account = sp.getString("account", "")
         BaseFragment.account = account ?: ""
+        initOtherProcess()
     }
 
     private fun initEdit() {
@@ -169,5 +177,26 @@ class HomeSearchActivity : BaseActivity<ActivitySearchBinding>() {
         return R.layout.activity_search
     }
 
+    /**
+     * 初始化另一进程数据
+     */
+    private lateinit var serviceConnection: ServiceConnection
+
+    private fun initOtherProcess() {
+        initService()
+    }
+
+    private fun initService() {
+        serviceConnection = object : ServiceConnection {
+            override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
+                MainActivity.service = TCPInterface.Stub.asInterface(p1)
+            }
+
+            override fun onServiceDisconnected(p0: ComponentName?) {}
+        }
+        val intent = Intent(this, NetService::class.java)
+        this.startService(intent)
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
 
 }

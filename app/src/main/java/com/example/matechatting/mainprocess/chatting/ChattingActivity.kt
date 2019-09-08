@@ -9,29 +9,28 @@ import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.matechatting.ADD_FRIEND_REQUEST_BROADCAST_ACTION
 import com.example.matechatting.HAS_NEW_MESSAGE_ACTION
 import com.example.matechatting.MyApplication
-import com.example.matechatting.R
 import com.example.matechatting.base.BaseActivity
-import com.example.matechatting.base.BaseFragment.Companion.userId
 import com.example.matechatting.bean.ChattingBean
 import com.example.matechatting.databinding.ActivityChattingBinding
 import com.example.matechatting.listener.EditTextTextChangeListener
-import com.example.matechatting.mainprocess.bindphone.BindPhoneViewModel
 import com.example.matechatting.mainprocess.main.MainActivity
 import com.example.matechatting.utils.InjectorUtils
 import com.example.matechatting.utils.NetworkState
 import com.example.matechatting.utils.ToastUtilWarning
 import com.example.matechatting.utils.isNetworkConnected
 import com.example.matechatting.utils.statusbar.StatusBarUtil
-import io.reactivex.disposables.CompositeDisposable
 import java.sql.Timestamp
+
 
 class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
     private lateinit var back: FrameLayout
@@ -52,12 +51,12 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         StatusBarUtil.setRootViewFitsSystemWindows(this, true)
         StatusBarUtil.setStatusBarDarkTheme(this, true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            StatusBarUtil.setStatusBarColor(this, this.getColor(R.color.bg_ffffff))
+            StatusBarUtil.setStatusBarColor(this, this.getColor(com.example.matechatting.R.color.bg_ffffff))
         }
         id = intent.getIntExtra("id", 0)
         name = intent.getStringExtra("name") ?: ""
 
-        Log.d("bbb","ChattingActivity onCreate")
+        Log.d("bbb", "ChattingActivity onCreate")
         canSlideFinish(true)
         initBinding()
         initView()
@@ -66,11 +65,12 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         initEdit()
         initSend()
         initReceiver()
+        initBack()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("bbb","ChattingActivity onDestroy")
+        Log.d("bbb", "ChattingActivity onDestroy")
         updateState()
     }
 
@@ -87,8 +87,8 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         title.text = name
     }
 
-    private fun updateState(){
-        viewModel.updateState(4,id)
+    private fun updateState() {
+        viewModel.updateState(4, id)
     }
 
     private fun initRecycler() {
@@ -98,6 +98,15 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
 //        layoutManager.reverseLayout  = true
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
+        recycler.addOnLayoutChangeListener { view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if (bottom < oldBottom) {
+                recycler.post {
+                    if (adapter.itemCount > 0) {
+                        recycler.scrollToPosition(adapter.itemCount - 1)
+                    }
+                }
+            }
+        }
         viewModel.getData(id, MyApplication.getUserId()!!)
         viewModel.newsList.observe(this, Observer {
             adapter.frashDatas(it)
@@ -110,18 +119,13 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
             EditTextTextChangeListener({
                 if (it.isEmpty()) {
                     send.isEnabled = false
-                    send.background = this.getDrawable(R.drawable.shape_send_button_corner_disabled)
+                    send.background = this.getDrawable(com.example.matechatting.R.drawable.shape_send_button_corner_disabled)
                 } else {
                     send.isEnabled = true
-                    send.background = this.getDrawable(R.drawable.shape_send_button_corner_available)
+                    send.background = this.getDrawable(com.example.matechatting.R.drawable.shape_send_button_corner_available)
                 }
             })
         )
-        edit.setOnFocusChangeListener { view: View, hasFocus: Boolean ->
-            if (hasFocus) {
-                recycler.scrollToPosition(adapter.getCount() - 1)
-            }
-        }
     }
 
     private fun initSend() {
@@ -177,7 +181,14 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         }
     }
 
+
+    private fun initBack() {
+        back.setOnClickListener {
+            finish()
+        }
+    }
+
     override fun getLayoutId(): Int {
-        return R.layout.activity_chatting
+        return com.example.matechatting.R.layout.activity_chatting
     }
 }

@@ -2,7 +2,6 @@ package com.example.matechatting.mainprocess.milelistsearch
 
 import android.content.Context
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
@@ -16,7 +15,6 @@ import com.example.matechatting.R
 import com.example.matechatting.base.BaseActivity
 import com.example.matechatting.databinding.ActivityMileListSearchBinding
 import com.example.matechatting.listener.EditTextTextChangeListener
-import com.example.matechatting.mainprocess.homesearch.HomeSearchViewModel
 import com.example.matechatting.utils.ToastUtilWarning
 import com.example.matechatting.utils.statusbar.StatusBarUtil
 

@@ -3,6 +3,7 @@ package com.example.matechatting.mainprocess.milelist
 import android.util.Log
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.database.UserInfoDao
+import com.example.matechatting.utils.PinyinUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -37,6 +38,7 @@ class MileListRepository(private val userInfoDao: UserInfoDao) {
 
     fun updateState(userBean: UserBean, state: Int, callback: () -> Unit = {}) {
         userBean.state = state
+        userBean.pinyin = PinyinUtil.getFirstHeadWordChar(userBean.name)
         userInfoDao.insertUserInfo(userBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

@@ -2,7 +2,6 @@ package com.example.matechatting.database
 
 import androidx.room.*
 import com.example.matechatting.bean.UserBean
-import io.netty.handler.codec.dns.DnsOpCode.UPDATE
 import io.reactivex.Single
 
 @Dao
@@ -18,7 +17,7 @@ interface UserInfoDao {
     fun getAllFriendId(): Single<List<Int>>
 
     @Query("UPDATE user_info SET profile_photo = :path WHERE id = :id")
-    fun updateHeadImage(path: String, id: Int)
+    fun updateHeadImage(path: String, id: Int): Single<Int>
 
     @Query("UPDATE user_info SET state = :state WHERE id = :id")
     fun updateStateById(state: Int, id: Int): Single<Int>

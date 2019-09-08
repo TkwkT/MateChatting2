@@ -12,9 +12,6 @@ import com.example.matechatting.R
 import com.example.matechatting.base.BaseActivity
 import com.example.matechatting.databinding.ActivityChangePasswordBinding
 import com.example.matechatting.listener.EditTextTextChangeListener
-import com.example.matechatting.utils.InjectorUtils
-import com.example.matechatting.utils.dialog.OKDialogUtil
-import com.example.matechatting.utils.statusbar.StatusBarUtil
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.AGAIN_ERROR
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.AGAIN_NULL
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.ERROR
@@ -25,6 +22,9 @@ import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.C
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.NEW_TOO_LONG
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.OK
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.OLD_NULL
+import com.example.matechatting.utils.InjectorUtils
+import com.example.matechatting.utils.dialog.OKDialogUtil
+import com.example.matechatting.utils.statusbar.StatusBarUtil
 
 
 class ChangePasswordActivity : BaseActivity<ActivityChangePasswordBinding>() {

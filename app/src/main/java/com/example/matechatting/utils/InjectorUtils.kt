@@ -7,7 +7,6 @@ import com.example.matechatting.mainprocess.bindphone.BindPhoneViewModelFactory
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordByTokenRepository
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordByTokenViewModelFactory
 import com.example.matechatting.mainprocess.chatting.ChattingRepository
-import com.example.matechatting.mainprocess.chatting.ChattingViewModel
 import com.example.matechatting.mainprocess.chatting.ChattingViewModelFactory
 import com.example.matechatting.mainprocess.cliphead.ClipRepository
 import com.example.matechatting.mainprocess.cliphead.ClipViewModelFactory
@@ -41,7 +40,8 @@ object InjectorUtils {
 
     fun getLoginRepository(context: Context): LoginRepository {
         return LoginRepository.getInstance(
-            AppDatabase.getInstance(context.applicationContext).loginDao()
+            AppDatabase.getInstance(context.applicationContext).loginDao(),
+            AppDatabase.getInstance(context.applicationContext).userInfoDao()
         )
     }
 
@@ -68,8 +68,14 @@ object InjectorUtils {
         return ResetPassViewModelFactory(ResetPassRepository())
     }
 
+    fun getClipRepository(context: Context): ClipRepository {
+        return ClipRepository.getInstance(
+            AppDatabase.getInstance(context).userInfoDao()
+        )
+    }
+
     fun provideClipViewModelFactory(context: Context): ClipViewModelFactory {
-        return ClipViewModelFactory(ClipRepository())
+        return ClipViewModelFactory(getClipRepository(context))
     }
 
     fun getHomeItemRepository(context: Context): HomeItemRepository {
@@ -84,7 +90,7 @@ object InjectorUtils {
 
     fun getInfoDetailRepository(context: Context): InfoDetailRepository {
         return InfoDetailRepository.getInstance(
-            AppDatabase.getInstance(context.applicationContext).userInfoDao()
+            AppDatabase.getInstance(context).userInfoDao()
         )
     }
 
@@ -94,7 +100,7 @@ object InjectorUtils {
 
     fun getMineRepository(context: Context): MineRepository {
         return MineRepository.getInstance(
-            AppDatabase.getInstance(context.applicationContext).userInfoDao()
+            AppDatabase.getInstance(context).userInfoDao()
         )
     }
 
@@ -104,14 +110,15 @@ object InjectorUtils {
 
     fun getAccountRepository(context: Context): AccountRepository {
         return AccountRepository.getInstance(
-            AppDatabase.getInstance(context.applicationContext).loginDao()
+            AppDatabase.getInstance(context).loginDao()
         )
     }
 
     fun getMyInfoRepository(context: Context): MyInfoRepository {
         return MyInfoRepository.getInstance(
-            AppDatabase.getInstance(context.applicationContext).userInfoDao(),
-            AppDatabase.getInstance(context.applicationContext).loginDao()
+            AppDatabase.getInstance(context).userInfoDao(),
+            AppDatabase.getInstance(context).loginDao(),
+            AppDatabase.getInstance(context).directionDao()
         )
     }
 
@@ -123,18 +130,24 @@ object InjectorUtils {
         return HomeSearchViewModelFactory(HomeSearchRepository())
     }
 
-    fun provideDirectionActivityViewModelFactory(context: Context): DirectionActivityViewModelFactory {
-        return DirectionActivityViewModelFactory(DirectionActivityRepository())
+    fun getDirectionActivityRepository(context: Context): DirectionActivityRepository {
+        return DirectionActivityRepository.getInstance(
+            AppDatabase.getInstance(context.applicationContext).directionDao()
+        )
     }
 
-    fun getDirectionRepository(context: Context): DirectionFragmentRepository {
+    fun provideDirectionActivityViewModelFactory(context: Context): DirectionActivityViewModelFactory {
+        return DirectionActivityViewModelFactory(getDirectionActivityRepository(context))
+    }
+
+    fun getDirectionFragmentRepository(context: Context): DirectionFragmentRepository {
         return DirectionFragmentRepository.getInstance(
             AppDatabase.getInstance(context.applicationContext).directionDao()
         )
     }
 
     fun provideDirectionFragmentViewModelFactory(context: Context): DirectionFragmentViewModelFactory {
-        return DirectionFragmentViewModelFactory(getDirectionRepository(context))
+        return DirectionFragmentViewModelFactory(getDirectionFragmentRepository(context))
     }
 
     fun getMileListRepository(context: Context): MileListRepository {

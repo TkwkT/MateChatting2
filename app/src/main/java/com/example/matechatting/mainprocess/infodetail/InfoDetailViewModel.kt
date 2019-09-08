@@ -1,5 +1,6 @@
 package com.example.matechatting.mainprocess.infodetail
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.example.matechatting.bean.UserBean
@@ -20,8 +21,10 @@ class InfoDetailViewModel(private val repository: InfoDetailRepository) : ViewMo
     val defaultSlogan = "快乐生活每一天"
 
     fun getDetail(id: Int, callback: (UserBean) -> Unit) {
+
         repository.getDetail(id) {
             callback(it)
+            Log.d("aaa","当前user $it ")
             it.apply {
                 if (name.isEmpty()) {
                     detailName.set(defaltString)

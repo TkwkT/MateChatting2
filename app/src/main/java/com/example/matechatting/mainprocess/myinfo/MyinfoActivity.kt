@@ -4,20 +4,21 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.TextView
-import com.example.matechatting.utils.statusbar.StatusBarUtil
 import android.os.IBinder
 import android.text.SpannableStringBuilder
+import android.util.Log
 import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
+import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
@@ -34,6 +35,7 @@ import com.example.matechatting.utils.ToastUtilWarning
 import com.example.matechatting.utils.dialog.AccessPermissionDialogUtil
 import com.example.matechatting.utils.dialog.ChooseHeadImageDialogUtil
 import com.example.matechatting.utils.isNetworkConnected
+import com.example.matechatting.utils.statusbar.StatusBarUtil
 
 /**
  * 未实现返回时上传数据@link [initBack]
@@ -70,7 +72,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
     private lateinit var doOther: () -> Unit
     private lateinit var userBeanSave: UserBean
     private lateinit var userBean: UserBean
-    private lateinit var headFram: FrameLayout
+    private lateinit var headFrame: FrameLayout
     private lateinit var headImage: ImageView
     private var inSchool = false
     private var token = ""
@@ -85,7 +87,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
             isFirst = true
             inSchool = intent.getBooleanExtra("inSchool", false)
         } else {
-            token = MyApplication.getToken() ?: ""
+//            token = MyApplication.getToken() ?: ""
             inSchool = MyApplication.getInSchool() ?: false
         }
         StatusBarUtil.setRootViewFitsSystemWindows(this, true)
@@ -112,6 +114,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
     }
 
     private fun whenBeak() {
+        changeUserBeanSave()
         if (userBean != userBeanSave) {
             AccessPermissionDialogUtil().initAccessPermissionDialog(this, saveCallback, { finish() })
                 .setTitle("尚未保存")
@@ -136,8 +139,10 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
             company = tv_company.text.toString().trim()
             job = tv_post.text.toString().trim()
             val qqStr = tv_qq.text.toString().trim()
-            if (qqStr.isNotEmpty() && QQ_REGEX.find(qqStr) != null) {
-                qqAccount = qqStr.toInt()
+            qqAccount = if (qqStr.isNotEmpty() && QQ_REGEX.find(qqStr) != null) {
+                qqStr.toInt()
+            }else{
+                0
             }
             wechatAccount = tv_weixin.text.toString().trim()
             val emilStr = tv_email.text.toString().trim()
@@ -163,7 +168,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
         } else {
             if (!inSchool) {
                 this.userBeanSave.apply {
-                    if (company.isEmpty() || job.isEmpty() || graduation.isEmpty()) {
+                    if (company.isEmpty() || job.isEmpty() || direction.isEmpty()) {
                         ToastUtilWarning().setToast(this@MyinfoActivity, "请填写带\"*\"的必要信息")
                     } else {
                         viewModel.saveData(userBeanSave, { doOnSaveSuccess() }, token)
@@ -180,6 +185,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
             val intent = Intent(this, MainActivity::class.java)
             setResult(Activity.RESULT_OK, intent)
         }
+        Log.d("aaa","doOnSaveSuccess 调用")
         finish()
     }
 
@@ -193,15 +199,31 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
         val factory = InjectorUtils.provideMyInfoViewModelFactory(this)
         viewModel = ViewModelProviders.of(this, factory).get(MyInfoViewModel::class.java)
         viewModel.getMyInfo({
+            setHeadImage(it.headImage)
             userBeanSave = it
             userBean = userBeanSave.copy()
+            viewModel.getDirection(it.direction)
         }, token)
         binding.viewmodel = viewModel
     }
 
+    private fun setHeadImage(imageUrl:String){
+        val end = imageUrl.endsWith(".jpg")
+        if (end){
+            val bitmap = BitmapFactory.decodeFile(imageUrl)
+            headImage.setImageBitmap(bitmap)
+            Log.d("aaa","加载本地图片")
+        }else{
+            Glide.with(headImage.context)
+                .load(imageUrl)
+                .error(R.drawable.ic_head)
+                .into(headImage)
+        }
+    }
+
     private fun initView() {
         binding.apply {
-            headFram = myInfoHead
+            headFrame = myInfoHead
             tv_company = tvMyinfoCompany
             tv_location = tvMyinfoLocation
             tv_post = tvMyinfoPost
@@ -237,7 +259,6 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
             val intent = Intent(this, PersonsignActivity::class.java)
             intent.putExtra("slogan", userBeanSave.slogan)
             startActivityForResult(intent, PERSON_SIGN_REQUEST_CODE)
-
         }
         /**
          * 现居地点击
@@ -272,7 +293,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
     private fun initHead() {
         val chooseHeadImageUtil = ChooseHeadImageDialogUtil()
         initChooseHeadImageCallback()
-        headFram.setOnClickListener {
+        headFrame.setOnClickListener {
             chooseHeadImageUtil.initChooseHeadImageDialog(this, chooseHeadImageCallback)
         }
 
@@ -326,12 +347,17 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
 
     private fun initFlDirect() {
         fl_direct.setOnClickListener {
-            if (isNetworkConnected(this) == NetworkState.NONE) {
-                ToastUtilWarning().setToast(this, "当前网络未连接")
-            } else {
+            //            if (isNetworkConnected(this) == NetworkState.NONE) {
+//                ToastUtilWarning().setToast(this, "当前网络未连接")
+//            } else {
+            viewModel.getDirection(userBeanSave.direction){
                 val intent = Intent(this, DirectionNewActivity::class.java)
+                intent.putExtra("token",token  )
                 startActivityForResult(intent, DIRECT_REQUEST_CODE)
             }
+
+
+//            }
         }
     }
 
@@ -341,10 +367,17 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
             this.userBeanSave.slogan = personSign
         }
         if (resultCode == Activity.RESULT_OK && requestCode == ALBUM_REQUEST_CODE && data != null) {
-            val uri = data.data
-            if (uri != null) {
-                Glide.with(this).load(uri).into(headImage)
+            val path = data.getStringExtra("image_path")
+            if (!path.isNullOrEmpty()) {
+                val bitmap = BitmapFactory.decodeFile(path)
+                headImage.setImageBitmap(bitmap)
+                userBeanSave.headImage = path
+//                Glide.with(this).load(uri).into(headImage)
             }
+        }
+        if (resultCode == Activity.RESULT_OK && requestCode == DIRECT_REQUEST_CODE && data != null) {
+            val direction = data.getStringExtra("direction") ?: ""
+            userBeanSave.direction = direction
         }
     }
 

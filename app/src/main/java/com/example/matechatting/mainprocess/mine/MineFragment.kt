@@ -5,6 +5,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,11 +17,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import com.example.matechatting.R
 import com.example.matechatting.ALBUM_REQUEST_CODE
 import com.example.matechatting.LOGIN_REQUEST_CODE
-import com.example.matechatting.databinding.FragmentMineBinding
+import com.example.matechatting.R
 import com.example.matechatting.base.PermissionFragment
+import com.example.matechatting.databinding.FragmentMineBinding
 import com.example.matechatting.mainprocess.album.AlbumActivity
 import com.example.matechatting.mainprocess.bindphone.BindPhoneActivity
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordActivity
@@ -67,6 +68,7 @@ class MineFragment : PermissionFragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.d("aaa","mine onResume")
         init()
     }
 
@@ -78,8 +80,9 @@ class MineFragment : PermissionFragment() {
      * 处理登陆后的点击事件以及登陆后的逻辑
      */
     override fun initLogin() {
-        Log.d("aaa","initLogin")
-        viewModel.getMine()
+        viewModel.getMine{
+            setHeadImage(it)
+        }
         headImage.isEnabled = true
         changePassword.isEnabled = true
         myInformation.isEnabled = true
@@ -112,6 +115,20 @@ class MineFragment : PermissionFragment() {
         }
     }
 
+    private fun setHeadImage(imageUrl:String){
+        val end = imageUrl.endsWith(".jpg")
+        if (end){
+            val bitmap = BitmapFactory.decodeFile(imageUrl)
+            headImage.setImageBitmap(bitmap)
+            Log.d("aaa","加载本地图片")
+        }else{
+            Glide.with(headImage.context)
+                .load(imageUrl)
+                .error(R.drawable.ic_head)
+                .into(headImage)
+        }
+    }
+
     @SuppressLint("InlinedApi")
     private fun initChooseHeadImageCallback() {
         chooseHeadImageCallback = {
@@ -122,9 +139,11 @@ class MineFragment : PermissionFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == ALBUM_REQUEST_CODE && data != null) {
-            val uri = data.data
-            if (uri != null) {
-                Glide.with(this).load(uri).into(headImage)
+            val path = data.getStringExtra("image_path")
+            if (!path.isNullOrEmpty()) {
+                val bitmap = BitmapFactory.decodeFile(path)
+                headImage.setImageBitmap(bitmap)
+//                Glide.with(this).load(uri).into(headImage)
             }
         }
     }

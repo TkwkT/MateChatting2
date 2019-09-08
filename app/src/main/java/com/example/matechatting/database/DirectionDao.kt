@@ -10,11 +10,17 @@ import io.reactivex.Single
 @Dao
 interface DirectionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertDirection(directionBean: DirectionBean)
+    fun insertDirection(directionBean: DirectionBean): Single<Long>
 
     @Query("UPDATE direction SET is_select = :isSelect WHERE id = :id")
-    fun updateState(isSelect: Boolean, id: Int)
+    fun updateState(isSelect: Boolean, id: Int): Single<Int>
 
     @Query("SELECT * FROM direction WHERE parent_id = :parentId")
     fun selectDirectionByParent(parentId: Int): Single<List<DirectionBean>>
+
+    @Query("SELECT * FROM direction WHERE directionName = :directionName")
+    fun selectDirectionByName(directionName: String): Single<DirectionBean>
+
+    @Query("SELECT * FROM direction WHERE id = :id")
+    fun selectDirectionById(id: Int): Single<DirectionBean>
 }

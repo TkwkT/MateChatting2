@@ -6,13 +6,14 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
+import com.example.matechatting.MyApplication
 import com.example.matechatting.R
 import com.example.matechatting.mainprocess.mine.MineFragment
 import com.example.matechatting.myview.CropView
@@ -80,9 +81,10 @@ class ClipActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun generateUriAndReturn() {
         val zoomedCropBitmap = clipView.clip() ?: return
-        val file = File(cacheDir, "cropped_" + System.currentTimeMillis() + ".jpg")
+        val file = File(MyApplication.getContext().cacheDir, "cropped_" + System.currentTimeMillis() + ".jpg")
+        Log.d("aaa","file path ${file.absolutePath}")
         val mSaveUri = Uri.fromFile(file)
-
+        Log.d("aaa","头像路径 ${file.absolutePath}")
         if (mSaveUri != null) {
             var outputStream: OutputStream? = null
             try {
@@ -90,7 +92,13 @@ class ClipActivity : AppCompatActivity() {
                 if (outputStream != null) {
                     zoomedCropBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
                 }
-                viewModel.postImage(file)
+                viewModel.postImage(file){
+                    val intent = Intent(this, MineFragment::class.java)
+                    intent.putExtra("image_path",file.absolutePath)
+                    setResult(Activity.RESULT_OK, intent)
+                    outputStream?.flush()
+                    finish()
+                }
             } catch (ex: IOException) {
                 Log.e("aaa", "Cannot open file: $mSaveUri", ex)
             } finally {
@@ -104,10 +112,6 @@ class ClipActivity : AppCompatActivity() {
                 }
             }
         }
-        val intent = Intent(this, MineFragment::class.java)
-        intent.data = mSaveUri
-        setResult(Activity.RESULT_OK, intent)
-        finish()
     }
 
     private fun whenBack(){

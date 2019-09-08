@@ -1,8 +1,5 @@
 package com.example.matechatting.bean
 
-import androidx.room.ColumnInfo
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class PostUserBean(
@@ -34,8 +31,10 @@ data class PostUserBean(
     var wechatAccount: String = "",
     @SerializedName("profile_photo")
     var headImage: String = "",
-    @SerializedName("gender")
-    var gender:String = "",
+    @SerializedName("is_man")
+    var is_man:Boolean = true,
     @SerializedName("id")
-    var id: Int = 0
+    var id: Int = 0,
+    @SerializedName("in_school")
+    var inSchool:Boolean = false
 )

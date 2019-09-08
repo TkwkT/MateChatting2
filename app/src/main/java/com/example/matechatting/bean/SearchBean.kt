@@ -1,6 +1,5 @@
 package com.example.matechatting.bean
 
-import android.text.Layout
 import androidx.room.ColumnInfo
 import com.google.gson.annotations.SerializedName
 
@@ -32,7 +31,7 @@ data class SearchBean(
                 var directions: Directions,
                 @SerializedName("email")
                 var email: String,
-                @SerializedName("gender")
+                @SerializedName("is_man")
                 var gender: String,
                 @SerializedName("graduation_year")
                 var graduationYear: Int,

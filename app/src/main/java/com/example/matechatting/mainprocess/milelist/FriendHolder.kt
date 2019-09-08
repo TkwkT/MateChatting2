@@ -1,15 +1,13 @@
 package com.example.matechatting.mainprocess.milelist
 
 import android.os.Build
+import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
 import com.example.matechatting.R
 import com.example.matechatting.base.BaseHolder
-import com.example.matechatting.bean.MileItemBean
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.databinding.ItemMileListFriendBinding
-import com.example.matechatting.utils.PinyinUtil
 
 class FriendHolder(private val binding: ItemMileListFriendBinding) : BaseHolder(binding) {
 
@@ -17,11 +15,17 @@ class FriendHolder(private val binding: ItemMileListFriendBinding) : BaseHolder(
         if (t is FriendSource) {
             val bean = t.friend
             binding.apply {
+                Log.d("aaa", "isFirst ${bean.first}")
                 if (bean.first) {
                     mileListTitle.visibility = View.VISIBLE
-                    mileListTitle.text = bean.pinyin.substring(0, 1)
+                    mileListTitle.text = bean.pinyin
                 } else {
                     mileListTitle.visibility = View.GONE
+                }
+                if (bean.isLast) {
+                    itemMileListFoot.visibility = View.VISIBLE
+                } else {
+                    itemMileListFoot.visibility = View.GONE
                 }
                 itemFriendName.text = bean.name
                 itemFriendGraduate.text = bean.graduation
@@ -30,7 +34,7 @@ class FriendHolder(private val binding: ItemMileListFriendBinding) : BaseHolder(
                 if (bean.onLine) {
                     mileListOnLineState.text = "在线"
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        mileListOnLineState.setTextColor(context.getColor(R.color.text_green))
+                        mileListOnLineState.setTextColor(context.getColor(R.color.text_656bff))
                     }
                 } else {
                     mileListOnLineState.text = "离线"

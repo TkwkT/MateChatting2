@@ -5,11 +5,8 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import com.example.matechatting.bean.ImageBean
-import java.io.File
 
 
 class AlbumImage {

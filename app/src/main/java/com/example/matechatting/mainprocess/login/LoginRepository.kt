@@ -1,20 +1,84 @@
 package com.example.matechatting.mainprocess.login
 
 import android.util.Log
+import com.bumptech.glide.Glide
 import com.example.matechatting.MyApplication
 import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.bean.AccountBean
+import com.example.matechatting.bean.UserBean
 import com.example.matechatting.database.LoginDao
+import com.example.matechatting.database.UserInfoDao
 import com.example.matechatting.mainprocess.login.LoginState.Companion.ERROR
 import com.example.matechatting.mainprocess.login.LoginState.Companion.FIRST
 import com.example.matechatting.mainprocess.login.LoginState.Companion.NOT_FIRST
 import com.example.matechatting.mainprocess.login.LoginState.Companion.NO_NETWORK
+import com.example.matechatting.network.GetMineService
 import com.example.matechatting.network.IdeaApi
 import com.example.matechatting.network.LoginService
+import com.example.matechatting.utils.PinyinUtil
+import com.example.matechatting.utils.runOnNewThread
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class LoginRepository(private val loginDao: LoginDao) : BaseRepository {
+class LoginRepository(private val loginDao: LoginDao, private val userInfoDao: UserInfoDao) : BaseRepository {
+
+    fun getMineFromNet(callback: () -> Unit) {
+        IdeaApi.getApiService(GetMineService::class.java).getMine()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                val info = setInfo(it)
+                info.state = 1
+                saveInDB(info, callback)
+                if (!info.headImage.isNullOrEmpty()) {
+                    saveHeadImagePath(info.headImage, info.id)
+                }
+            }, {})
+    }
+
+    fun saveHeadImagePath(url: String, id: Int) {
+        if (MyApplication.getUserId() == null) {
+            return
+        }
+        runOnNewThread {
+            val target = Glide.with(MyApplication.getContext())
+                .asFile()
+                .load(url)
+                .submit()
+            val path = target.get().absolutePath
+            userInfoDao.updateHeadImage(path, MyApplication.getUserId()!!)
+        }
+    }
+
+    private fun saveInDB(userBean: UserBean, callback: () -> Unit) {
+        userBean.pinyin = PinyinUtil.getFirstHeadWordChar(userBean.name)
+        userInfoDao.insertUserInfo(userBean)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                callback()
+                Log.d("aaa", "信息保存成功 $it")
+            }, {})
+
+    }
+
+    private fun setInfo(userBean: UserBean): UserBean {
+        userBean.apply {
+            if (!directions.isNullOrEmpty()) {
+                val sb = StringBuilder()
+                for (s: String in directions!!) {
+                    sb.append(" ")
+                    sb.append(s)
+                }
+                direction = sb.toString()
+            }
+            val sb = StringBuilder()
+            sb.append(graduationYear)
+            sb.append("年入学")
+            graduation = sb.toString()
+        }
+        return userBean
+    }
 
     fun checkFromDatabase(account: String, password: String, callback: (state: Int, List<String>) -> Unit) {
         loginDao.checkAccount(account)
@@ -76,10 +140,10 @@ class LoginRepository(private val loginDao: LoginDao) : BaseRepository {
         @Volatile
         private var instance: LoginRepository? = null
 
-        fun getInstance(classifyDao: LoginDao) =
+        fun getInstance(classifyDao: LoginDao, userInfoDao: UserInfoDao) =
             instance ?: synchronized(this) {
                 instance
-                    ?: LoginRepository(classifyDao).also { instance = it }
+                    ?: LoginRepository(classifyDao, userInfoDao).also { instance = it }
             }
     }
 

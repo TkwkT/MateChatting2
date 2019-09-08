@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import com.example.matechatting.base.BaseHolder
-import com.example.matechatting.bean.MileItemBean
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.databinding.ItemMileListNewFriendBinding
 
@@ -16,6 +15,8 @@ class NewFriendHolder(private val binding: ItemMileListNewFriendBinding) : BaseH
                 if (bean.first) {
                     mileListTitle.visibility = View.VISIBLE
                     mileListTitle.text = "新好友"
+                }else{
+                    mileListTitle.visibility = View.GONE
                 }
                 itemFriendName.text = bean.name
                 itemFriendGraduate.text = bean.graduation

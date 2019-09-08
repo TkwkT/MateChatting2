@@ -12,13 +12,13 @@ import com.example.matechatting.R
 import com.example.matechatting.base.BaseActivity
 import com.example.matechatting.databinding.ActivityBindPhoneBinding
 import com.example.matechatting.listener.EditTextTextChangeListener
-import com.example.matechatting.utils.InjectorUtils
-import com.example.matechatting.utils.dialog.OKDialogUtil
-import com.example.matechatting.utils.statusbar.StatusBarUtil
 import com.example.matechatting.mainprocess.bindphone.BindPhoneState.Companion.CODE_ERROR
 import com.example.matechatting.mainprocess.bindphone.BindPhoneState.Companion.OK
 import com.example.matechatting.mainprocess.bindphone.BindPhoneState.Companion.PHONE_ERROR
 import com.example.matechatting.mainprocess.bindphone.BindPhoneState.Companion.PHONE_NULL
+import com.example.matechatting.utils.InjectorUtils
+import com.example.matechatting.utils.dialog.OKDialogUtil
+import com.example.matechatting.utils.statusbar.StatusBarUtil
 
 class BindPhoneActivity : BaseActivity<ActivityBindPhoneBinding>() {
     private lateinit var back: FrameLayout

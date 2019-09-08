@@ -18,17 +18,17 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.example.matechatting.R
-import com.example.matechatting.databinding.FragmentResetPasswordBinding
 import com.example.matechatting.base.BaseFragment
+import com.example.matechatting.databinding.FragmentResetPasswordBinding
 import com.example.matechatting.listener.EditTextTextChangeListener
-import com.example.matechatting.utils.InjectorUtils
-import com.example.matechatting.utils.dialog.OKDialogUtil
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.NEW_ERROR
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.NEW_NO6
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.NEW_NULL
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.NEW_OK
 import com.example.matechatting.mainprocess.changepassword.ChangePasswordState.Companion.NEW_TOO_LONG
+import com.example.matechatting.utils.InjectorUtils
+import com.example.matechatting.utils.dialog.OKDialogUtil
 
 class ResetPasswordFragment : BaseFragment() {
     private lateinit var binding: FragmentResetPasswordBinding

@@ -1,16 +1,12 @@
 package com.example.matechatting.utils
 
 import android.content.Context
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.bumptech.glide.Glide.init
-import com.example.matechatting.MyApplication
 import com.example.matechatting.R
 
 class ToastUtilWarning {

@@ -1,9 +1,7 @@
 package com.example.matechatting.listener
 
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.matechatting.utils.InjectorUtils
 
 abstract class RecyclerScrollListener(private val layoutManager: LinearLayoutManager) :
     RecyclerView.OnScrollListener() {

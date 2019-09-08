@@ -1,8 +1,8 @@
 package com.example.matechatting.mainprocess.forgetpassword
 
+import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.network.ChangeResetPassService
 import com.example.matechatting.network.IdeaApi
-import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.network.OtherTokenInterceptor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

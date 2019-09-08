@@ -14,20 +14,18 @@ import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.example.matechatting.*
-import com.example.matechatting.mainprocess.main.MainActivity
-import com.example.matechatting.mainprocess.main.MyOnTouchListener
-import com.example.matechatting.databinding.FragmentMileListBinding
 import com.example.matechatting.base.BaseFragment
 import com.example.matechatting.bean.UserBean
-import com.example.matechatting.listener.AddFriendBroadcastReceiver
+import com.example.matechatting.databinding.FragmentMileListBinding
 import com.example.matechatting.mainprocess.infodetail.InfoDetailActivity
 import com.example.matechatting.mainprocess.login.LoginActivity
+import com.example.matechatting.mainprocess.main.MainActivity
+import com.example.matechatting.mainprocess.main.MyOnTouchListener
 import com.example.matechatting.myview.SideView
 import com.example.matechatting.utils.*
 import com.example.matechatting.utils.statusbar.StatusBarUtil
@@ -118,7 +116,7 @@ class MileListFragment : BaseFragment() {
             adapter.notifyDataSetChanged()
         }
         viewModel.getAllFriend {
-            Log.d("aaa", "getAllFriend ${it.size}")
+            Log.d("aaa", "getAllFriend ${it[0].pinyin}")
             friendNull = it.isEmpty()
             val array = ArrayList(it)
             if (it.isNotEmpty()) {
@@ -172,7 +170,7 @@ class MileListFragment : BaseFragment() {
         }
         friendLayoutCallback = {
             val intent = Intent(requireActivity(), InfoDetailActivity::class.java)
-            Log.d("aaa","测试 $it")
+            Log.d("aaa", "测试 $it")
             intent.putExtra("id", it)
             intent.putExtra("subject", FRIEND)
             requireActivity().startActivityForResult(intent, 0x999)
@@ -227,6 +225,11 @@ class MileListFragment : BaseFragment() {
             override fun onTouchingLetterChanged(str: String) {
                 letterText.visibility = View.VISIBLE
                 letterText.text = str
+                val position = adapter.scrollToPosition(str)
+                if (position != -1) {
+                    recycler.smoothScrollToPosition(position)
+                }
+
             }
         })
     }
