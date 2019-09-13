@@ -90,7 +90,7 @@ class ClipActivity : AppCompatActivity() {
             try {
                 outputStream = contentResolver.openOutputStream(mSaveUri)
                 if (outputStream != null) {
-                    zoomedCropBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                    zoomedCropBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
                 }
                 viewModel.postImage(file){
                     val intent = Intent(this, MineFragment::class.java)

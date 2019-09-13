@@ -21,20 +21,18 @@ class MainRepository(private val userInfoDao: UserInfoDao) {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d("aaa","main 个人信息 $it")
+                Log.d("aaa", "main 个人信息 ${it.directions}")
                 val info = setInfo(it)
                 info.state = 1
-                saveInDB(info)
                 if (!info.headImage.isNullOrEmpty()) {
                     saveHeadImagePath(info) { path ->
-                        Log.d("aaa","path $path")
-                        userInfoDao.updateHeadImage(path, MyApplication.getUserId()!!)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({},{
-                                it.printStackTrace()
-                            })
+                        info.headImage = path
+                        Log.d("aaa","网络获取信息 $info")
+                        saveInDB(info)
                     }
+                } else {
+                    Log.d("aaa","直接存入数据 $info")
+                    saveInDB(info)
                 }
             }, {})
     }
@@ -54,7 +52,7 @@ class MainRepository(private val userInfoDao: UserInfoDao) {
                 .load(sb.toString())
                 .submit()
             val path = target.get().absolutePath
-            Log.d("aaa","main path")
+            Log.d("aaa", "main path $path")
             callback(path)
 
         }
@@ -66,7 +64,7 @@ class MainRepository(private val userInfoDao: UserInfoDao) {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d("aaa", "信息保存成功 $it")
+                Log.d("aaa", "信息保存成功 ${userBean.direction} + $userBean")
             }, {})
     }
 
@@ -161,7 +159,7 @@ class MainRepository(private val userInfoDao: UserInfoDao) {
                     sb.append(" ")
                     sb.append(s)
                 }
-                direction = sb.toString()
+                direction = sb.toString().trim()
             }
             val sb = StringBuilder()
             sb.append(graduationYear)

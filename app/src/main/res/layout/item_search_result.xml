@@ -107,7 +107,7 @@
 				app:layout_constraintTop_toTopOf="parent"
 				app:layout_constraintBottom_toBottomOf="parent"
 				android:layout_width="0dp"
-				android:layout_height="10dp"
+				android:layout_height="wrap_content"
 				android:text="前端开发"
 				android:textColor="@color/text_item_person_gray"
 				android:textSize="14sp"

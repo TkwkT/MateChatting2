@@ -2,7 +2,10 @@ package com.example.matechatting.mainprocess.login
 
 import android.util.Log
 import com.bumptech.glide.Glide
+import com.example.matechatting.BASE_URL
+import com.example.matechatting.MORE_BASE
 import com.example.matechatting.MyApplication
+import com.example.matechatting.PATH
 import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.bean.AccountBean
 import com.example.matechatting.bean.UserBean
@@ -29,24 +32,30 @@ class LoginRepository(private val loginDao: LoginDao, private val userInfoDao: U
             .subscribe({
                 val info = setInfo(it)
                 info.state = 1
-                saveInDB(info, callback)
                 if (!info.headImage.isNullOrEmpty()) {
-                    saveHeadImagePath(info.headImage, info.id)
+                    saveHeadImagePath(info.headImage) { path ->
+                        info.headImage = path
+                        saveInDB(info, callback)
+                    }
+                } else {
+                    saveInDB(info, callback)
                 }
             }, {})
     }
 
-    fun saveHeadImagePath(url: String, id: Int) {
-        if (MyApplication.getUserId() == null) {
-            return
-        }
+    fun saveHeadImagePath(url: String, callback: (String) -> Unit) {
         runOnNewThread {
+            val sb = StringBuilder()
+            sb.append(BASE_URL)
+                .append(MORE_BASE)
+                .append(PATH)
+                .append(url)
             val target = Glide.with(MyApplication.getContext())
                 .asFile()
-                .load(url)
+                .load(sb.toString())
                 .submit()
             val path = target.get().absolutePath
-            userInfoDao.updateHeadImage(path, MyApplication.getUserId()!!)
+            callback(path)
         }
     }
 

@@ -11,7 +11,6 @@ import com.example.matechatting.utils.isNetworkConnected
 
 class HomeItemViewModel(private val repository: HomeItemRepository) : ViewModel() {
     val dataList = MutableLiveData<List<HomeItemBean>>()
-    private val arrayList = ArrayList<HomeItemBean>()
     private var isLoading = false
 
     fun getDataPaging(context: Context, callback: (LiveData<PagedList<HomeItemBean>>) -> Unit) {
@@ -23,17 +22,16 @@ class HomeItemViewModel(private val repository: HomeItemRepository) : ViewModel(
     }
 
 
-
-    fun getDataNormal(context: Context) {
+    fun getDataNormal(context: Context, callback: (Boolean) -> Unit = {}) {
         if (isNetworkConnected(context) == NetworkState.NONE) {
             repository.getHomeFromDB {
-                arrayList.addAll(it)
-                dataList.value = arrayList
+                dataList.value = it
+                callback(false)
             }
         } else {
             repository.getHomeFromNet {
-                arrayList.addAll(it)
-                dataList.value = arrayList
+                dataList.value = it
+                callback(false)
             }
         }
     }

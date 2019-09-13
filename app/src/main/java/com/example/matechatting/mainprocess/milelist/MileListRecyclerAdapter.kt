@@ -18,7 +18,7 @@ import com.example.matechatting.databinding.ItemMileListNewFriendBinding
 class MileListRecyclerAdapter(
     private val newFriendLayoutCallback: (Int) -> Unit,
     private val newFriendButtonCallback: (Int) -> Unit,
-    private val newChattingCallback: (Int) -> Unit,
+    private val newChattingCallback: (UserBean) -> Unit,
     private val friendLayoutCallback: (Int) -> Unit
 ) : RecyclerView.Adapter<BaseHolder>() {
     private val newFriendArray = ArrayList<UserBean>()
@@ -128,7 +128,7 @@ class MileListRecyclerAdapter(
             is NewChattingHolder -> {
                 val bean = getNewChattingItem(position)
                 holder.bind(NewChattingSource(bean))
-                holder.getLayout().setOnClickListener { newChattingCallback(bean.id) }
+                holder.getLayout().setOnClickListener { newChattingCallback(bean) }
             }
             is FriendHolder -> {
                 Log.d("aaa", "FriendHolder")

@@ -21,6 +21,8 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
+		<activity android:name=".mainprocess.album.AlbumListActivity">
+		</activity>
 		<activity android:name=".mainprocess.milelistsearch.MileListSearchActivity">
 		</activity>
 
@@ -82,10 +84,6 @@
 		</activity>
 		<activity
 			android:name=".mainprocess.myinfo.PersonsignActivity"
-			android:screenOrientation="portrait">
-		</activity>
-		<activity
-			android:name=".DirectionActivity"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity

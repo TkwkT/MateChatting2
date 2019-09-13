@@ -22,7 +22,6 @@
 				android:id="@+id/album_back"
 				android:layout_width="25dp"
 				android:layout_height="25dp"
-				android:layout_marginLeft="14dp"
 				android:layout_marginStart="22dp">
 
 				<ImageView
@@ -40,6 +39,16 @@
 				android:text="最近照片"
 				android:textSize="16sp"
 				android:textColor="@color/text_4e4e4e"/>
+
+			<TextView
+				android:id="@+id/album_cancel"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="取消"
+				android:textSize="16sp"
+				android:textColor="@color/text_4e4e4e"
+				android:layout_gravity="end|center_vertical"
+				android:layout_marginEnd="16dp"/>
 
 		</androidx.appcompat.widget.Toolbar>
 

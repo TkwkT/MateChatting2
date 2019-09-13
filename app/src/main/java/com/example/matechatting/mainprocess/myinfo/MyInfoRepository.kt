@@ -110,14 +110,10 @@ class MyInfoRepository(
             postUserBean.city = city
             postUserBean.company = company
             postUserBean.email = email
-            postUserBean.is_man = man
-            postUserBean.graduationYear = graduationYear
             postUserBean.job = job
-            postUserBean.majorName = majorName
             postUserBean.qqAccount = qqAccount
             postUserBean.slogan = slogan
             postUserBean.wechatAccount = wechatAccount
-            postUserBean.inSchool = inSchool
         }
         return postUserBean
     }

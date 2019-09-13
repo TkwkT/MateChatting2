@@ -104,7 +104,6 @@ class DirectionNewActivity : BaseActivity<ActivityDirectionNewBinding>() {
     private fun initViewPager(list: List<BigDirectionBean>) {
         fragmentList = ArrayList()
         for (big: BigDirectionBean in list) {
-            Log.d("aaa", "传入 fragmnet的id ${big.id}")
             fragmentList.add(DirectionNewFragment.newInstance(big.id))
         }
         viewPager.adapter = PagerAdapter(fragmentList, supportFragmentManager)
@@ -143,7 +142,7 @@ class DirectionNewActivity : BaseActivity<ActivityDirectionNewBinding>() {
             resultMap.forEach { key, value ->
                 sb.append(" ").append(value)
             }
-            Log.d("bbb","保存的方向 ${sb.toString()}")
+            Log.d("aaa","保存的方向 $sb")
             intent.putExtra("direction", sb.toString().trim())
             setResult(Activity.RESULT_OK, intent)
             finish()

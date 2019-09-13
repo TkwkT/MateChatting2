@@ -1,8 +1,12 @@
 package com.example.matechatting.mainprocess.homesearch
 
+import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
+import com.example.matechatting.BASE_URL
+import com.example.matechatting.MORE_BASE
+import com.example.matechatting.PATH
 import com.example.matechatting.base.BaseHolder
 import com.example.matechatting.bean.SearchBean
 import com.example.matechatting.databinding.ItemSearchResultBinding
@@ -18,7 +22,13 @@ class HomeSearchResultHolder(private val binding: ItemSearchResultBinding) : Bas
                 itemSearchMajor.text = searchBean.direction
                 itemSearchCompany.text = searchBean.company
                 if (!searchBean.headImage.isNullOrEmpty()) {
-                    Glide.with(context).load(searchBean.headImage).into(itemSearchHead)
+                    val sb = StringBuilder()
+                    sb.append(BASE_URL)
+                        .append(MORE_BASE)
+                        .append(PATH)
+                        .append(searchBean.headImage)
+                    Log.d("aaa","头像 $sb")
+                    Glide.with(context).load(sb.toString()).into(itemSearchHead)
                 }
             }
         }

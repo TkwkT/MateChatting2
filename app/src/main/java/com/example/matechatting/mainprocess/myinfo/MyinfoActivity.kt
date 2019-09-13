@@ -365,6 +365,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
         if (resultCode == Activity.RESULT_OK && requestCode == PERSON_SIGN_REQUEST_CODE && data != null) {
             val personSign: String = data.getStringExtra("personSign") ?: ""
             this.userBeanSave.slogan = personSign
+
         }
         if (resultCode == Activity.RESULT_OK && requestCode == ALBUM_REQUEST_CODE && data != null) {
             val path = data.getStringExtra("image_path")
@@ -378,6 +379,8 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
         if (resultCode == Activity.RESULT_OK && requestCode == DIRECT_REQUEST_CODE && data != null) {
             val direction = data.getStringExtra("direction") ?: ""
             userBeanSave.direction = direction
+            viewModel.saveData(userBean)
+            Log.d("aaa","返回信息 ${userBeanSave.direction}")
         }
     }
 

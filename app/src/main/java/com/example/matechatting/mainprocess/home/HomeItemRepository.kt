@@ -61,10 +61,10 @@ class HomeItemRepository(private val homeItemDao: HomeItemDao) : BaseRepository 
             ).getHomeItem(it)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    val list = setDirection(it)
-                    addToDB(list)
-                    callback(list)
+                .subscribe({ list ->
+                    val temp = setDirection(list)
+                    addToDB(temp)
+                    callback(temp)
                 }, {})
         }
     }
@@ -74,9 +74,7 @@ class HomeItemRepository(private val homeItemDao: HomeItemDao) : BaseRepository 
         homeItemDao.insertHomeItems(list)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Log.d("aaa", "保存成功 $it")
-            }, {})
+            .subscribe({}, {})
     }
 
     private fun getPage(callback: (Int) -> Unit) {

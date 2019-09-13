@@ -2,7 +2,6 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
@@ -47,7 +46,6 @@
 			android:text="完成"
 			android:textSize="16sp"
 			android:textColor="@color/text_4e4e4e"
-			android:layout_marginRight="16dp"
 			android:layout_marginEnd="16dp"/>
 
 	</androidx.appcompat.widget.Toolbar>

@@ -90,10 +90,6 @@ class SmallDirectionHolder(private val bigDirectionId: Int, private val binding:
         }
     }
 
-
-    companion object {
-        private var num = 0
-    }
 }
 
 data class SmallDirectionSource(

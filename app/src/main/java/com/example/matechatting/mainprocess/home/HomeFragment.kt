@@ -44,14 +44,12 @@ class HomeFragment : BaseFragment() {
     private lateinit var receiver: BroadcastReceiver
     private lateinit var intentFilter: IntentFilter
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         init()
         initRecyclerView()
         setCallbackToAdapter()
         initReceiver()
-
         return binding.root
     }
 
@@ -82,17 +80,13 @@ class HomeFragment : BaseFragment() {
 
     private fun initScrollListener(layoutManager: LinearLayoutManager) {
         scrollListener = object : RecyclerScrollListener(layoutManager) {
+
             override fun isLastPage(): Boolean {
                 return PAGE.isEmpty()
             }
 
-            override fun loadMoreItems() {
-                viewModel.getDataNormal(requireContext())
-                viewModel.dataList.observe(this@HomeFragment, Observer { list ->
-                    if (list != null) {
-                        adapter.freshData(list)
-                    }
-                })
+            override fun loadMoreItems(callback: (Boolean) -> Unit) {
+                viewModel.getDataNormal(requireContext(),callback)
             }
         }
     }

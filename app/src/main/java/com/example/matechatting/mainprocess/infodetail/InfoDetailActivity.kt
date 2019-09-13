@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.lifecycle.ViewModelProviders
 import com.example.matechatting.*
 import com.example.matechatting.base.BaseActivity
@@ -32,6 +33,7 @@ class InfoDetailActivity : BaseActivity<ActivityInfoDetailBinding>() {
     private lateinit var userBean: UserBean
     private lateinit var receiver: BroadcastReceiver
     private lateinit var intentFilter: IntentFilter
+    private lateinit var headImage: ImageView
 
     private var subject = 0
     private var id = 0
@@ -58,7 +60,8 @@ class InfoDetailActivity : BaseActivity<ActivityInfoDetailBinding>() {
         val factory = InjectorUtils.provideInfoDetailViewModelFactory(this)
         viewModel = ViewModelProviders.of(this, factory).get(InfoDetailViewModel::class.java)
         back = binding.infoDetailBack
-        viewModel.getDetail(id) {
+        headImage = binding.infoDetailHeadImage
+        viewModel.getDetail(id,headImage) {
             userBean = it
         }
         binding.viewmodel = viewModel
@@ -103,7 +106,6 @@ class InfoDetailActivity : BaseActivity<ActivityInfoDetailBinding>() {
     private fun myRegisterReceiver() {
         intentFilter = IntentFilter()
         intentFilter.addAction(ADD_FRIEND_REQUEST_BROADCAST_ACTION)
-//        receiver = AddFriendBroadcastReceiver()
         registerReceiver(receiver, intentFilter)
     }
 

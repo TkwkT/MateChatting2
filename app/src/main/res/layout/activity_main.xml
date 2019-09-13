@@ -35,7 +35,8 @@
 			app:tabRippleColor="@android:color/transparent"
 			app:tabSelectedTextColor="@color/tabSelectText"
 			app:tabTextColor="@color/tabUnselectedText"
-			android:background="#FFFFFF"/>
+			android:background="#FFFFFF"
+			android:elevation="10dp"/>
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

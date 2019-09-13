@@ -20,7 +20,6 @@ class NetService : Service() {
     override fun onCreate() {
         super.onCreate()
         InjectorUtils.getAccountRepository(this).getToken {
-
             if (it.isNotEmpty()) {
                 runOnNewThread {
                     NettyClient(HOST, PORT, this).start(it)
@@ -49,12 +48,16 @@ class NetService : Service() {
 
     private fun acceptFriendService(friendId: Int) {
         TCPRepository.changeUserState(4, friendId) {
-            val message = MessageFactory.acceptFriendResponse(friendId)
-            NettyClient.channel?.writeAndFlush(message)
-            NettyClient.channel?.writeAndFlush(MessageFactory.stringMessage("我们已经成为好友啦！", friendId))
-            val intent = Intent(ACCEPT_FRIEND_ACTION)
-            intent.putExtra("subject", 3)
-            this.sendBroadcast(intent)
+            TCPRepository.getLoginStateById(friendId) {
+                TCPRepository.updateOnLineState(it, friendId) {
+                    val message = MessageFactory.acceptFriendResponse(friendId)
+                    NettyClient.channel?.writeAndFlush(message)
+                    NettyClient.channel?.writeAndFlush(MessageFactory.stringMessage("我们已经成为好友啦！", friendId))
+                    val intent = Intent(ACCEPT_FRIEND_ACTION)
+                    intent.putExtra("subject", 3)
+                    this.sendBroadcast(intent)
+                }
+            }
         }
     }
 

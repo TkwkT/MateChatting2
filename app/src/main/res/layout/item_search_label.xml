@@ -14,7 +14,7 @@
 		android:layout_gravity="center"
 		android:paddingLeft="13dp"
 		android:paddingRight="13dp"
-		android:paddingTop="7dp"
+		android:paddingTop="5dp"
 		android:paddingBottom="7dp"
 		android:text="java"/>
 

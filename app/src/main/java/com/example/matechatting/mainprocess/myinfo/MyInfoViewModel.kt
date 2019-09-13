@@ -25,25 +25,18 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : ViewModel() {
     val myInfoDefailtSlogan = "快乐生活每一天"
 
     fun getMyInfo(callback: (UserBean) -> Unit, token: String = "") {
-//        if (isNetworkConnected(MyApplication.getContext()) == NetworkState.NONE) {
-        Log.d("aaa","token $token")
         if (token.isEmpty()) {
             repository.getMyInfoFromDB {
-                Log.d("aaa","getMyInfo $it")
                 setInfoDB(it)
                 callback(it)
             }
         } else {
-            Log.d("aaa","网络")
             repository.getMyInfoFromNet({
+                Log.d("aaa","第一次登陆返回数据 $it")
                 setInfoNet(it)
                 callback(it)
             }, token)
         }
-
-//        } else {
-
-//        }
     }
 
     private fun setInfoDB(userBean: UserBean) {
@@ -75,14 +68,14 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : ViewModel() {
             callback()
             return
         } else {
-            Log.d("aaa", "方向 $direction")
+            Log.d("aaa","方向字符串 $direction")
             val a = direction.split(" ")
+            Log.d("aaa","方向字符串拆分 $a")
             for ((i, str: String) in a.withIndex()) {
                 repository.getDirectionByName(str) { small ->
-                    Log.d("aaa", "是否选中 $small")
                     if (small.directionName.isNotEmpty()) {
                         DirectionNewActivity.saveMap.put(small.id, small.bigDirectionId)
-                        Log.d("aaa", "方向传参 ${DirectionNewActivity.saveMap}")
+                        DirectionNewActivity.resultMap.put(small.id,small.directionName)
                         small.isSelect = true
                         repository.updateDirection(small)
                         repository.getDirectionById(small.bigDirectionId) { big ->
@@ -97,7 +90,6 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : ViewModel() {
             }
         }
     }
-
 
     private fun setInfoNet(userBean: UserBean) {
         userBean.apply {
@@ -127,7 +119,7 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : ViewModel() {
         }
     }
 
-    fun saveData(userBean: UserBean, callback: () -> Unit, token: String = "") {
+    fun saveData(userBean: UserBean, callback: () -> Unit={}, token: String = "") {
         repository.saveMyInfo(userBean, callback, token)
     }
 }

@@ -67,7 +67,6 @@ class BigDirectionAdapter(private val callback: (position: Int) -> Unit) :
                     it.isSelect = false
                 }
             }
-            Log.d("aaa","currentList "+ it.id)
             if (DirectionNewActivity.saveMap.isEmpty()) {
                 it.isSelect = false
             }

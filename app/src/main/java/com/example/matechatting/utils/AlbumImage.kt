@@ -19,18 +19,18 @@ class AlbumImage {
         if (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
         } else {
-            getImage(activity, callback)
+            getAllImage(activity, callback)
         }
     }
 
-    fun getImage(activity: Activity, callback: (list: List<String>) -> Unit) {
+    fun getAllImage(activity: Activity, callback: (list: List<String>) -> Unit) {
         val arrayList = ArrayList<String>()
         val mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val cursor = activity.contentResolver.query(
             mImageUri, null,
             MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
             arrayOf("image/jpeg", "image/png"),
-            MediaStore.Images.Media.DATE_MODIFIED
+            MediaStore.Images.Media.DATE_MODIFIED + " DESC"
         ) ?: return
 //        while (cursor.moveToNext()) {
 //            //图片路径

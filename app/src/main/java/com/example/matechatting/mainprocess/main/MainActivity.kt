@@ -44,10 +44,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainConstValue {
         initViewPager()
         initTabLayout()
         listenNetwork()
-        Log.d("aaa","oncreate")
+        Log.d("aaa", "oncreate")
     }
 
     private fun init() {
+
         canSlideFinish(false)
         viewPager = binding.mainViewpager
         tabLayout = binding.mainTbLayout
@@ -113,9 +114,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainConstValue {
         BaseFragment.isLogin = isLogin
         val account = sp.getString("account", "")
         BaseFragment.account = account ?: ""
+        val factory = InjectorUtils.provideMainViewModelFactory(this)
+        viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
         if (isLogin) {
-            val factory = InjectorUtils.provideMainViewModelFactory(this)
-            viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
             initOtherProcess()
             viewModel.getFriend {
                 val intent = Intent(ACCEPT_FRIEND_ACTION)
@@ -124,12 +125,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainConstValue {
             }
             viewModel.getMineInfo()
         }
+        viewModel.getDirection()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == LOGIN_REQUEST_CODE && data != null) {
-            Log.d("aaa","onActivityResult")
+            Log.d("aaa", "onActivityResult")
             getLoginState()
         }
     }

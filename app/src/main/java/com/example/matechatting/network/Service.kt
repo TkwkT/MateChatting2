@@ -158,3 +158,9 @@ interface UpdateFirstService {
     @POST("/postcard/app/log_in_at_first")
     fun updateFirst(): Observable<SBean>
 }
+
+interface GetOnlineStateService {
+    @FormUrlEncoded
+    @POST("/postcard/app/user/is_online")
+    fun updateDirection(@Field("id") id: Int): Observable<IsLoginBean>
+}

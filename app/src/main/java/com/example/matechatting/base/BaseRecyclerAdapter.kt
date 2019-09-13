@@ -29,7 +29,6 @@ abstract class BaseRecyclerAdapter<B : ViewDataBinding, D : Any, HD : BaseHolder
     }
 
     override fun getItemCount(): Int {
-        Log.d("aaa",mDiffer.currentList.size.toString())
         return mDiffer.currentList.size
 
     }

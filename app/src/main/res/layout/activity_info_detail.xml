@@ -81,8 +81,7 @@
 						app:layout_constraintTop_toTopOf="parent"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintLeft_toLeftOf="parent"
-						android:src="@drawable/ic_mine_head"
-						android:layout_marginLeft="11dp"
+						android:src="@drawable/ic_head"
 						android:layout_marginStart="11dp"/>
 
 					<TextView
@@ -149,7 +148,8 @@
 					android:layout_marginRight="16dp"
 					android:layout_marginTop="15dp"
 					android:orientation="vertical"
-					android:background="@drawable/shape_circle_corner">
+					android:background="@drawable/shape_circle_corner"
+					android:paddingBottom="24dp">
 
 					<!--所在公司-->
 					<FrameLayout
@@ -351,19 +351,20 @@
 					<androidx.constraintlayout.widget.ConstraintLayout
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:layout_marginBottom="23dp">
+						android:layout_marginTop="13dp"
+						android:minHeight="24dp">
 
 						<TextView
-							app:layout_constraintTop_toTopOf="parent"
-							app:layout_constraintLeft_toLeftOf="parent"
+							android:id="@+id/info_detail_temp"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
+							app:layout_constraintTop_toTopOf="parent"
+							app:layout_constraintLeft_toLeftOf="parent"
 							android:textSize="14sp"
 							android:text="个人介绍"
 							android:textColor="@color/text_4e4e4e"
 							android:layout_gravity="center_vertical"
-							android:layout_marginLeft="22dp"
-							/>
+							android:layout_marginStart="22dp"/>
 
 						<TextView
 							app:layout_constraintTop_toTopOf="parent"
@@ -374,12 +375,12 @@
 							android:layout_height="wrap_content"
 							android:textSize="@dimen/InfodetailtvSize"
 							android:textColor="#5c5c5c"
-							android:layout_gravity="center_vertical"
-							android:layout_marginLeft="120dp"
-							android:layout_marginRight="40dp"
+							android:layout_marginStart="120dp"
+							android:layout_marginEnd="40dp"
 							app:layout_constraintHorizontal_bias="0"
 							android:text="@{viewmodel.detailSlogan}"
 							/>
+
 					</androidx.constraintlayout.widget.ConstraintLayout>
 				</LinearLayout>
 

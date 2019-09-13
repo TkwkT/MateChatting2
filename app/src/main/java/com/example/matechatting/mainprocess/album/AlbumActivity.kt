@@ -15,9 +15,6 @@ import com.example.matechatting.mainprocess.cliphead.ClipActivity
 import com.example.matechatting.utils.AlbumImage
 import com.example.matechatting.utils.statusbar.StatusBarUtil
 
-/**
- * 裁剪图片功能未实现
- */
 class AlbumActivity : BaseActivity<ActivityAlbumBinding>() {
     private lateinit var albumRecyclerView: RecyclerView
     private lateinit var adapter: AlbumRecyclerAdapter

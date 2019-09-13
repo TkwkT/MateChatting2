@@ -33,7 +33,6 @@ object ReadMessage {
             //收到别人发的消息
             STRING_MESSAGE -> {
                 stringMessage(message, context)
-
             }
             //发送的消息已成功接收
             SUCCESS -> {
@@ -160,17 +159,26 @@ object ReadMessage {
         TCPRepository.getUserInfo(id) {
             if (it) {
                 TCPRepository.changeUserState(3, id) {
-                    Log.d("aaa","changeUserState ")
-                    val intent = Intent(ACCEPT_FRIEND_ACTION)
-                    intent.putExtra("subject", HAS_NEW_FRIEND)
-                    context.sendBroadcast(intent)
+                    TCPRepository.getLoginStateById(id) { login ->
+                        updateOnLineState(login, id) {
+                            Log.d("aaa", "changeUserState ")
+                            val intent = Intent(ACCEPT_FRIEND_ACTION)
+                            intent.putExtra("subject", HAS_NEW_FRIEND)
+                            context.sendBroadcast(intent)
+                        }
+                    }
                 }
             } else {
                 TCPRepository.getAndSaveFriendInfo(3, id) {
-                    Log.d("aaa","getAndSaveFriendInfo ")
-                    val intent = Intent(ACCEPT_FRIEND_ACTION)
-                    intent.putExtra("subject", HAS_NEW_FRIEND)
-                    context.sendBroadcast(intent)
+                    TCPRepository.getLoginStateById(id) { login ->
+                        updateOnLineState(login, id) {
+                            Log.d("aaa", "getAndSaveFriendInfo ")
+                            val intent = Intent(ACCEPT_FRIEND_ACTION)
+                            intent.putExtra("subject", HAS_NEW_FRIEND)
+                            context.sendBroadcast(intent)
+                        }
+                    }
+
                 }
             }
         }

@@ -16,15 +16,15 @@ class DirectionActivityViewModel(private val repository: DirectionActivityReposi
 
     fun getBigDirection(callback: (List<BigDirectionBean>) -> Unit) {
 //        if (isNetworkConnected(MyApplication.getContext()) == NetworkState.NONE) {
-            repository.getBigDirectionFromDB{
-                if (!it.isNullOrEmpty()){
-                    Log.d("bbb","数据库有")
-                    callback(it)
-                }else{
-                    Log.d("bbb","数据库没")
-                    repository.getBigDirectionFromNet(callback)
-                }
+        repository.getBigDirectionFromDB {
+            if (!it.isNullOrEmpty()) {
+                Log.d("bbb", "数据库有")
+                callback(it)
+            } else {
+                Log.d("bbb", "数据库没")
+                repository.getBigDirectionFromNet(callback)
             }
+        }
 //        } else {
 //            repository.getBigDirectionFromNet(callback)
 //        }
@@ -33,6 +33,7 @@ class DirectionActivityViewModel(private val repository: DirectionActivityReposi
     fun saveDirection(saveTemp: SparseIntArray?, token: String, callback: () -> Unit) {
         val small = ArrayList<Int>()
         if (saveTemp != null && saveTemp.isNotEmpty()) {
+            Log.d("aaa", "savetemp $saveTemp")
             saveTemp.forEach { key, value ->
                 repository.updateDirectionState(false, key)
                 repository.updateDirectionState(false, value)
@@ -44,6 +45,7 @@ class DirectionActivityViewModel(private val repository: DirectionActivityReposi
             small.add(key)
         }
         val postDirectionBean = PostDirectionBean(small)
+        Log.d("aaa", "saveDirection $small")
         repository.saveDirection(postDirectionBean, token, callback)
 
     }

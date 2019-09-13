@@ -1,13 +1,14 @@
 package com.example.matechatting.mainprocess.direction
 
-import android.util.Log
 import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.bean.BigDirectionBean
 import com.example.matechatting.bean.DirectionBean
 import com.example.matechatting.bean.PostDirectionBean
 import com.example.matechatting.database.DirectionDao
-import com.example.matechatting.network.*
-import com.example.matechatting.utils.runOnNewThread
+import com.example.matechatting.network.GetBigDirectionService
+import com.example.matechatting.network.IdeaApi
+import com.example.matechatting.network.OtherTokenInterceptor
+import com.example.matechatting.network.UpdateDirectionService
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -37,7 +38,6 @@ class DirectionActivityRepository(private val directionDao: DirectionDao) : Base
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d("bbb","id 选中 $id")
                 callback()
             }, {})
     }
@@ -47,7 +47,6 @@ class DirectionActivityRepository(private val directionDao: DirectionDao) : Base
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess {
-                Log.d("aaa", "大方向 $it")
                 if (!it.isNullOrEmpty()) {
                     val bigArray = directionToBig(it)
                     val temp = changePosition(bigArray)
@@ -97,12 +96,10 @@ class DirectionActivityRepository(private val directionDao: DirectionDao) : Base
     }
 
     private fun insertBigDirection(directionBean: DirectionBean) {
-        Log.d("aaa", "插入的大方向 $directionBean")
         directionDao.insertDirection(directionBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d("aaa", "大标签插入成功 $it")
             }, {})
     }
 

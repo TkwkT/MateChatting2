@@ -63,7 +63,8 @@
 				app:layout_constraintBottom_toTopOf="@id/chatting_send_button"
 				android:background="@color/bg_f6f6f6"
 				android:overScrollMode="never"
-				android:paddingBottom="10dp"/>
+				android:paddingBottom="10dp"
+				android:transcriptMode="normal"/>
 
 			<EditText
 				android:id="@+id/chatting_message_edit"

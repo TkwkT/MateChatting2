@@ -29,7 +29,6 @@ class DirectionNewFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bigDirectionId = arguments?.getInt("big_direction_id") ?:throw Exception("id is 0")
-        Log.d("bbb", "onCreate$bigDirectionId")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

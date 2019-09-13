@@ -4,6 +4,7 @@ import com.example.matechatting.MyApplication
 import com.example.matechatting.bean.ChattingBean
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.database.AppDatabase
+import com.example.matechatting.network.GetOnlineStateService
 import com.example.matechatting.network.GetUserByIdService
 import com.example.matechatting.network.IdeaApi
 import com.example.matechatting.utils.PinyinUtil
@@ -11,6 +12,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 object TCPRepository {
+
+    fun getLoginStateById(id: Int,callback: (Boolean) -> Unit){
+        IdeaApi.getApiService(GetOnlineStateService::class.java).updateDirection(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                callback(it.online)
+            },{})
+    }
 
     fun getUserInfo(id: Int, callback: (Boolean) -> Unit) {
         AppDatabase.getInstance(MyApplication.getContext()).userInfoDao().getUserInfo(id)

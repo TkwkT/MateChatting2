@@ -16,13 +16,12 @@ import io.reactivex.schedulers.Schedulers
 class DirectionFragmentRepository(private val directionDao: DirectionDao) : BaseRepository {
 
     @SuppressLint("CheckResult")
-    fun getSmallDirection(bigDirectionId: Int, callback: (SaveDirectionBean) -> Unit) {
+    fun getSmallDirection(bigDirectionId: Int, callback: (SaveDirectionBean) -> Unit = {}) {
         IdeaApi.getApiService(GetSmallDirectionService::class.java, false).geySmallDirection(bigDirectionId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 val saveDirectionBean = smallToSave(it)
-                Log.d("bbb", "getSmallDirection" + saveDirectionBean.toString())
                 saveBean(saveDirectionBean)
                 callback(saveDirectionBean)
             }, {})
@@ -31,7 +30,6 @@ class DirectionFragmentRepository(private val directionDao: DirectionDao) : Base
     private fun saveBean(saveDirectionBean: SaveDirectionBean) {
         val bigId = saveDirectionBean.bigDirectionId
         if (!saveDirectionBean.normalDirectionList.isNullOrEmpty()) {
-            Log.d("aaa", "saveBean 调用")
             for (normal: SaveDirectionBean.NormalDirection in saveDirectionBean.normalDirectionList!!) {
                 if (normal.direction?.id == 0 && !normal.smallDirection.isNullOrEmpty()) { //只有小方向
                     for (small: Direction in normal.smallDirection!!) {
@@ -71,34 +69,28 @@ class DirectionFragmentRepository(private val directionDao: DirectionDao) : Base
     }
 
     private fun insertDirection(directionBean: DirectionBean) {
-        Log.d("aaa", "标签插入的bean $directionBean")
         directionDao.insertDirection(directionBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d("aaa", "标签插入成功 $it")
             }, {})
     }
 
     fun selectDirection(bigId: Int, callback: (SaveDirectionBean) -> Unit) {
         val normalArray = ArrayList<SaveDirectionBean.NormalDirection>()
-        Log.d("aaa", "大方向id $bigId")
         directionDao.selectDirectionByParent(bigId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d("aaa", "搜索结果 $it")
                 if (!(it.isNullOrEmpty() || it[0].isSmall)) { //有中方向的标签
                     var i = 0
                     for (normal: DirectionBean in it) {
                         selectSmellDirection(normal.id) { small ->
-                            Log.d("aaa", "小标签搜索结果 $small")
                             if (!small.isNullOrEmpty() && small[0].isSmall) {
                                 val normalBean = Direction(normal.directionName, normal.id)
                                 val smallDirection = ArrayList<Direction>()
                                 for (bean: DirectionBean in small) {
                                     val smallBean = Direction(bean.directionName, bean.id, bean.isSelect)
-                                    Log.d("aaa","seallBean $smallBean")
                                     smallDirection.add(smallBean)
                                 }
                                 val normal = SaveDirectionBean.NormalDirection(normalBean, smallDirection)
@@ -108,7 +100,6 @@ class DirectionFragmentRepository(private val directionDao: DirectionDao) : Base
                                     val save = SaveDirectionBean(bigId, normalArray)
                                     callback(save)
                                 }
-                                Log.d("aaa", "中标签的大小 ${normalArray.size}")
                             }
 
                         }

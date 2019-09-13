@@ -23,7 +23,7 @@
 			android:text="获取访问相册权限"
 			android:textSize="18sp"
 			android:textColor="@color/text_202020"
-			android:layout_marginTop="22dp"/>
+			android:layout_marginTop="30dp"/>
 
 		<TextView
 			android:id="@+id/message_ok_message"

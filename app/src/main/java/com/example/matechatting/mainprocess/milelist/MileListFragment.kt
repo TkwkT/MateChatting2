@@ -22,6 +22,7 @@ import com.example.matechatting.*
 import com.example.matechatting.base.BaseFragment
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.databinding.FragmentMileListBinding
+import com.example.matechatting.mainprocess.chatting.ChattingActivity
 import com.example.matechatting.mainprocess.infodetail.InfoDetailActivity
 import com.example.matechatting.mainprocess.login.LoginActivity
 import com.example.matechatting.mainprocess.main.MainActivity
@@ -47,7 +48,7 @@ class MileListFragment : BaseFragment() {
     private lateinit var intentFilter: IntentFilter
     private lateinit var newFriendLayoutCallback: (Int) -> Unit
     private lateinit var newFriendButtonCallback: (Int) -> Unit
-    private lateinit var newChattingCallback: (Int) -> Unit
+    private lateinit var newChattingCallback: (UserBean) -> Unit
     private lateinit var friendLayoutCallback: (Int) -> Unit
 
     private var newFriendNull = true
@@ -98,29 +99,22 @@ class MileListFragment : BaseFragment() {
 
     private fun initData() {
         viewModel.getAllNewFriend {
-            Log.d("aaa", "getAllNewFriend ${it.size}")
             newFriendNull = it.isEmpty()
-            if (it.isNotEmpty()) {
-                canVisible()
-            }
+            canVisible()
             adapter.freshNewFriends(it)
             adapter.notifyDataSetChanged()
         }
         viewModel.getAllNewChatting {
-            Log.d("aaa", "getAllNewChatting ${it.size}")
             newChattingNull = it.isEmpty()
-            if (it.isNotEmpty()) {
-                canVisible()
-            }
+            canVisible()
             adapter.freshNewChattings(it)
             adapter.notifyDataSetChanged()
         }
         viewModel.getAllFriend {
-            Log.d("aaa", "getAllFriend ${it[0].pinyin}")
             friendNull = it.isEmpty()
             val array = ArrayList(it)
+            canVisible()
             if (it.isNotEmpty()) {
-                canVisible()
                 Collections.sort(array, object : Comparator<UserBean> {
                     override fun compare(p0: UserBean?, p1: UserBean?): Int {
                         if (p0 != null && p1 != null) {
@@ -133,7 +127,6 @@ class MileListFragment : BaseFragment() {
             adapter.frashFriends(array)
             adapter.notifyDataSetChanged()
         }
-
     }
 
     private fun canVisible() {
@@ -163,9 +156,9 @@ class MileListFragment : BaseFragment() {
             }
         }
         newChattingCallback = {
-            val intent = Intent(requireActivity(), InfoDetailActivity::class.java)
-            intent.putExtra("id", it)
-            intent.putExtra("subject", NEW_CHATTING)
+            val intent = Intent(requireActivity(), ChattingActivity::class.java)
+            intent.putExtra("id", it.id)
+            intent.putExtra("name", it.name)
             requireActivity().startActivityForResult(intent, 0x999)
         }
         friendLayoutCallback = {

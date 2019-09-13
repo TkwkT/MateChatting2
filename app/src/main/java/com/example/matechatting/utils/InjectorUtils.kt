@@ -167,7 +167,11 @@ object InjectorUtils {
     }
 
     fun provideMainViewModelFactory(context: Context): MainViewModelFactory {
-        return MainViewModelFactory(getMainRepository(context))
+        return MainViewModelFactory(
+            getMainRepository(context),
+            getDirectionActivityRepository(context),
+            getDirectionFragmentRepository(context)
+        )
     }
 
     fun getChattingRepository(context: Context): ChattingRepository {
