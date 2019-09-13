@@ -11,6 +11,7 @@ class AlbumRecyclerAdapter(private val callback: (url: String) -> Unit) :
 
     override fun freshData(list: List<String>) {
         mDiffer.submitList(list)
+
     }
 
     override fun onCreate(binding: ItemAlbumImageBinding): AlbumHolder {
